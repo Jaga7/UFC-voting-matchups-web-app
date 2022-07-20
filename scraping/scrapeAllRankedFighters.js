@@ -5,7 +5,7 @@ const scrapeAllFighters = async (url, page) => {
 
   closeCookiesModal(page)
 
-  const weightClassesNames = {
+  const WEIGHT_CLASSES_NAMES = {
     menFlyweight: "menFlyweight",
     menBantamweight: "menBantamweight",
     menFeatherweight: "menFeatherweight",
@@ -19,7 +19,7 @@ const scrapeAllFighters = async (url, page) => {
     womenBantamweight: "womenBantamweight",
   }
 
-  const weightclassesNumbers = {
+  const WEIGHT_CLASSES_NUMBERS = {
     menFlyweight: 2,
     menBantamweight: 3,
     menFeatherweight: 4,
@@ -35,9 +35,9 @@ const scrapeAllFighters = async (url, page) => {
 
   const weightclassesFighters = {}
 
-  for (const weightClass in weightClassesNames) {
+  for (const weightClass in WEIGHT_CLASSES_NAMES) {
     weightclassesFighters[weightClass] = await scrapeWeightclass(
-      weightclassesNumbers[weightClass],
+      WEIGHT_CLASSES_NUMBERS[weightClass],
       page
     )
   }

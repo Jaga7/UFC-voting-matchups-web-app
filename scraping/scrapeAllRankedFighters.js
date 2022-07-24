@@ -1,9 +1,9 @@
-import { closeCookiesModal } from "./utils.js"
+import { closeCookiesModal } from "./utils.js";
 
 const scrapeAllFighters = async (url, page) => {
-  await page.goto(url)
+  await page.goto(url);
 
-  closeCookiesModal(page)
+  closeCookiesModal(page);
 
   const WEIGHT_CLASSES_NAMES = {
     menFlyweight: "menFlyweight",
@@ -17,7 +17,7 @@ const scrapeAllFighters = async (url, page) => {
     womenStrawweight: "womenStrawweight",
     womenFlyweight: "womenFlyweight",
     womenBantamweight: "womenBantamweight",
-  }
+  };
 
   const WEIGHT_CLASSES_NUMBERS = {
     menFlyweight: 2,
@@ -31,24 +31,25 @@ const scrapeAllFighters = async (url, page) => {
     womenStrawweight: 11,
     womenFlyweight: 12,
     womenBantamweight: 13,
-  }
+  };
 
-  const weightclassesFighters = {}
+  const weightclassesFighters = {};
 
   for (const weightClass in WEIGHT_CLASSES_NAMES) {
     weightclassesFighters[weightClass] = await scrapeWeightclass(
       WEIGHT_CLASSES_NUMBERS[weightClass],
       page
-    )
+    );
   }
 
   for (const weightclassFighters in weightclassesFighters) {
     console.log(
       `${weightclassFighters}`,
       weightclassesFighters[weightclassFighters]
-    )
+    );
   }
-}
+  return weightclassesFighters;
+};
 
 const scrapeWeightclass = async (weightclassNumber, page) => {
   const fightersFromWeightclass = await page.evaluate(
@@ -60,18 +61,18 @@ const scrapeWeightclass = async (weightclassNumber, page) => {
         (element) => element.textContent
       ),
     weightclassNumber
-  )
+  );
 
   const champion = await page.evaluate((weightclassNumber) => {
     const scrapedChampion = document.querySelector(
       `#block-mainpagecontent > div > div.l-container > div > div > div > div.view-content > div:nth-child(${weightclassNumber}) > div.view-grouping-content > table > caption > div > div.info > h5 > div > div > div > a`
-    )
-    return scrapedChampion ? scrapedChampion.textContent : null
-  }, weightclassNumber)
+    );
+    return scrapedChampion ? scrapedChampion.textContent : null;
+  }, weightclassNumber);
 
-  champion && fightersFromWeightclass.unshift(champion)
+  champion && fightersFromWeightclass.unshift(champion);
 
-  return fightersFromWeightclass
-}
+  return fightersFromWeightclass;
+};
 
-export { scrapeAllFighters }
+export { scrapeAllFighters };

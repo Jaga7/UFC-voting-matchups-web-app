@@ -6,157 +6,173 @@ const scrapeFightersWhoHaveAMatchup = async (url, page) => {
   await page.goto(url);
   await closeCookiesModal(page);
   //tu będzie loop na wchodzenie do kolejnych eventów
-  for (let i = 1; ; i++) {
-    for (let j = 1; ; j++) {
-      const scrapedEvent = await page.evaluate(
-        (i, j) =>
+  // for (let i = 1; ; i++) {
+  for (let numberOfSection = 1, j = 1; ; j++) {
+    const scrapedEvent = await page.evaluate(
+      (numberOfSection, j) =>
+        document.querySelector(
+          `#events-list-upcoming > div > div > div.l-container > div > div > section:nth-child(${numberOfSection}) > ul > li:nth-child(${j})`
+        ),
+      numberOfSection,
+      j
+    );
+    let isThereMoreAfterLoadedMore;
+    if (!scrapedEvent) {
+      console.log(`loading: i: ${numberOfSection}, j: ${j}`);
+      for (let m = 0; m < numberOfSection; m++) {
+        console.log(`m: ${m} i: ${numberOfSection}, j: ${j}`);
+        const scrapedLoadMoreButton = await page.evaluate(() =>
           document.querySelector(
-            `#events-list-upcoming > div > div > div.l-container > div > div > section:nth-child(${i}) > ul > li:nth-child(${j})`
-          ),
-        i,
-        j
-      );
-      let isThereMoreAfterLoadedMore;
-      if (!scrapedEvent) {
-        console.log(`loading: i: ${i}, j: ${j}`);
-        for (let m = 0; m < i; m++) {
-          console.log(`m: ${m} i: ${i}, j: ${j}`);
-          const scrapedEventAfterLoadedMore = await page.evaluate(() =>
-            document.querySelector(
-              `#events-list-upcoming > div > div > ul > li > a`
-            )
-          );
-
-          console.log(
-            "scrapedEventAfterLoadedMore",
-            scrapedEventAfterLoadedMore
-          );
-          // await page.evaluate(() =>
-          //   document.querySelector(
-          //     `#events-list-upcoming > div > div > ul > li > a`,
-          //     (elem) => elem.click()
-          //   )
-          // );
-          // await page.evaluate((_) => {
-          //   window.scrollBy(0, 1.5 * window.innerHeight);
-          // });
-          // await page.screenshot({ path: `buddyn${i}${j}shot.png` });
-          if (scrapedEventAfterLoadedMore) {
-            await page.$eval(
-              `#events-list-upcoming > div > div > ul > li > a`,
-              (elem) => {
-                elem ? elem.click() : null;
-              }
-            );
-            // i++
-            // j=1
-            // const scrapedEvent = await page.evaluate(
-            //   (i, j) =>
-            //     document.querySelector(
-            //       `#events-list-upcoming > div > div > div.l-container > div > div > section:nth-child(${i}) > ul > li:nth-child(${j})`
-            //     ),
-            //   i,
-            //   j
-            // );
-            // if (scrapedEvent) isThereMoreAfterLoadedMore = true;
-
-            if (m === i - 1) {
-              //jak doszliśmy do kliknięcia "load more" odpowiednią ilość razy w stosunku do tego w której sekcji byliśmy ostatnio
-              isThereMoreAfterLoadedMore = true;
-              // jak udało się "load more" to znaczy że nowa sekcja, czyli i++
-              i++;
-              j = 1;
-              await page.waitForSelector(
-                `#events-list-upcoming > div > div > div.l-container > div > div > section:nth-child(${i}) > ul > li:nth-child(${j}) > article > div.c-card-event--result__info > h3 > a`
-              );
-              break;
-            }
-          } else {
-            isThereMoreAfterLoadedMore = false;
-            break;
-          }
-        }
-      }
-      // if (!scrapedEvent) {
-      //   i = 1;
-      //   scrapedEvent = await page.evaluate(
-      //     (i) =>
-      //       document.querySelector(
-      //         `#events-list-upcoming > div > div > div.l-container > div > div > section:nth-child(2) > ul > li:nth-child(${i})`
-      //       ),
-      //     i
-      //   );
-      // }
-      console.log("i", i);
-      console.log("j", j);
-      console.log("scrapedEvent", scrapedEvent);
-      if (!scrapedEvent && !isThereMoreAfterLoadedMore) {
-        break;
-      } else {
-        await page.evaluate((_) => {
-          window.scrollBy(0, 1.5 * window.innerHeight);
-        });
-        await page.screenshot({ path: `buddy${i}${j}-screenshot.png` });
-        await page.$eval(
-          `#events-list-upcoming > div > div > div.l-container > div > div > section:nth-child(${i}) > ul > li:nth-child(${j}) > article > div.c-card-event--result__info > h3 > a`,
-          (elem) => {
-            elem.click();
-          }
+            `#events-list-upcoming > div > div > ul > li > a`
+          )
         );
 
-        for (let k = 1; ; k++) {
-          const scrapedFight = await page.evaluate(
-            (k) =>
-              document.querySelector(
-                `#edit-group-main-card > div > div > section > ul > li:nth-child(${k})`
-              ),
-            k
-          );
-          const scrapedFightWithDifferentSelector = await page.evaluate(
-            (k) =>
-              document.querySelector(
-                `#block-mainpagecontent > div > div.l-main > div > div > div.l-container.event-details-ad--prev-sibling > div > section > ul > li:nth-child(${k})`
-              ),
-            k
-          );
-          let shouldUseRegularSelectors = true;
-          if (scrapedFight) shouldUseRegularSelectors = true;
-          if (scrapedFightWithDifferentSelector)
-            shouldUseRegularSelectors = false;
-
-          // const scrapedFight = document.querySelector(
-          //   `#edit-group-main-card > div > div > section > ul > li:nth-child(${i})`
-          // );
-          if (!scrapedFight && !scrapedFightWithDifferentSelector) {
-            break;
-          } else {
-            const infoScrapedFromASingleFight =
-              await scrapeInfoFromASingleFight(
-                k,
-                page,
-                shouldUseRegularSelectors
-              );
-            // if the length equals 1, that means that only the weightclass was scraped, so there are no ranked fighters in that fight
-            if (infoScrapedFromASingleFight.length !== 1) {
-              scrapedFightersWithAMatchup.push(infoScrapedFromASingleFight);
+        console.log("scrapedLoadMoreButton", scrapedLoadMoreButton);
+        // await page.evaluate(() =>
+        //   document.querySelector(
+        //     `#events-list-upcoming > div > div > ul > li > a`,
+        //     (elem) => elem.click()
+        //   )
+        // );
+        // await page.evaluate((_) => {
+        //   window.scrollBy(0, 1.5 * window.innerHeight);
+        // });
+        // await page.screenshot({ path: `buddyn${i}${j}shot.png` });
+        if (scrapedLoadMoreButton) {
+          await page.$eval(
+            `#events-list-upcoming > div > div > ul > li > a`,
+            (elem) => {
+              elem ? elem.click() : null;
             }
+          );
+          await page.waitForSelector(
+            `#events-list-upcoming > div > div > div.l-container > div > div > section:nth-child(${
+              m + 2
+            }) > ul > li:nth-child(${1}) > article > div.c-card-event--result__info > h3 > a`
+          );
+          // i++
+          // j=1
+          // const scrapedEvent = await page.evaluate(
+          //   (i, j) =>
+          //     document.querySelector(
+          //       `#events-list-upcoming > div > div > div.l-container > div > div > section:nth-child(${i}) > ul > li:nth-child(${j})`
+          //     ),
+          //   i,
+          //   j
+          // );
+          // if (scrapedEvent) isThereMoreAfterLoadedMore = true;
+
+          if (m === numberOfSection - 1 && scrapedLoadMoreButton) {
+            //jak doszliśmy do kliknięcia "load more" odpowiednią ilość razy w stosunku do tego w której sekcji byliśmy ostatnio
+
+            //tu trzeba sprawdzić czy zmieniamy już sekcję (nie ma więcej eventów w tej sekcji)
+            const queriedEventInCurrentSection = await page.evaluate(
+              (numberOfSection, j) =>
+                document.querySelector(
+                  `#events-list-upcoming > div > div > div.l-container > div > div > section:nth-child(${numberOfSection}) > ul > li:nth-child(${j}) > article > div.c-card-event--result__info > h3 > a`
+                ),
+              numberOfSection,
+              j
+            );
+            if (!queriedEventInCurrentSection) {
+              numberOfSection++;
+              j = 1;
+            }
+            isThereMoreAfterLoadedMore = true;
+
+            // if (j === 4) {
+            //   numberOfSection++;
+            //   j = 1;
+            // }
+          }
+        } else {
+          isThereMoreAfterLoadedMore = false;
+          break;
+        }
+      }
+    }
+    // if (!scrapedEvent) {
+    //   i = 1;
+    //   scrapedEvent = await page.evaluate(
+    //     (i) =>
+    //       document.querySelector(
+    //         `#events-list-upcoming > div > div > div.l-container > div > div > section:nth-child(2) > ul > li:nth-child(${i})`
+    //       ),
+    //     i
+    //   );
+    // }
+    console.log("numberOfSection", numberOfSection);
+    console.log("j", j);
+    console.log("scrapedEvent", scrapedEvent);
+    if (!scrapedEvent && !isThereMoreAfterLoadedMore) {
+      break;
+    } else {
+      await page.evaluate((_) => {
+        window.scrollBy(0, 1.5 * window.innerHeight);
+      });
+      await page.screenshot({
+        path: `buddy${numberOfSection}${j}-screenshot.png`,
+      });
+      await page.$eval(
+        `#events-list-upcoming > div > div > div.l-container > div > div > section:nth-child(${numberOfSection}) > ul > li:nth-child(${j}) > article > div.c-card-event--result__info > h3 > a`,
+        (elem) => {
+          elem.click();
+        }
+      );
+
+      for (let k = 1; ; k++) {
+        const scrapedFight = await page.evaluate(
+          (k) =>
+            document.querySelector(
+              `#edit-group-main-card > div > div > section > ul > li:nth-child(${k})`
+            ),
+          k
+        );
+        const scrapedFightWithDifferentSelector = await page.evaluate(
+          (k) =>
+            document.querySelector(
+              `#block-mainpagecontent > div > div.l-main > div > div > div.l-container.event-details-ad--prev-sibling > div > section > ul > li:nth-child(${k})`
+            ),
+          k
+        );
+        let shouldUseRegularSelectors = true;
+        if (scrapedFight) shouldUseRegularSelectors = true;
+        if (scrapedFightWithDifferentSelector)
+          shouldUseRegularSelectors = false;
+
+        // const scrapedFight = document.querySelector(
+        //   `#edit-group-main-card > div > div > section > ul > li:nth-child(${i})`
+        // );
+        if (!scrapedFight && !scrapedFightWithDifferentSelector) {
+          break;
+        } else {
+          const infoScrapedFromASingleFight = await scrapeInfoFromASingleFight(
+            k,
+            page,
+            shouldUseRegularSelectors
+          );
+          // if the length equals 1, that means that only the weightclass was scraped, so there are no ranked fighters in that fight
+          if (infoScrapedFromASingleFight.length !== 1) {
+            scrapedFightersWithAMatchup.push(infoScrapedFromASingleFight);
           }
         }
-
-        // const infoScrapedFromASingleFight = await scrapeInfoFromASingleFight(
-        //   0,
-        //   page
-        // );
-        // console.log(
-        //   "infoScrapedFromASingleFight",
-        //   infoScrapedFromASingleFight
-        // );
-        console.log("scrapedFightersWithAMatchup", scrapedFightersWithAMatchup);
       }
-      await page.goto(url);
-      await closeCookiesModal(page);
+
+      // const infoScrapedFromASingleFight = await scrapeInfoFromASingleFight(
+      //   0,
+      //   page
+      // );
+      // console.log(
+      //   "infoScrapedFromASingleFight",
+      //   infoScrapedFromASingleFight
+      // );
+      console.log("scrapedFightersWithAMatchup", scrapedFightersWithAMatchup);
     }
+    await page.goto(url);
+    await closeCookiesModal(page);
   }
+  return scrapedFightersWithAMatchup;
+  // }
 };
 
 const scrapeInfoFromASingleFight = async (
@@ -324,11 +340,14 @@ const scrapeWeightclassOfFight = async (
     shouldUseRegularSelectors
   );
 
-  // return weightclassOfFight.split(" ")[0];
+  const isWomens = /women/gi.test(weightclassOfFight);
   const weightClassOfFightFiltered = weightclassOfFight
     .split(" ")
-    .filter((el) => el !== "title" && el !== "interim");
-  return weightClassOfFightFiltered.slice(0, -1).join(" ");
+    .filter((el) => el !== "Title" && el !== "Interim");
+
+  return isWomens
+    ? "women" + weightClassOfFightFiltered.slice(1, -1).join("")
+    : weightClassOfFightFiltered.slice(0, -1).join("");
 };
 
 export { scrapeFightersWhoHaveAMatchup };

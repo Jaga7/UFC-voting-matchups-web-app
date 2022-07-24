@@ -2,7 +2,8 @@ import { closeCookiesModal } from "./utils.js";
 import { WEIGHT_CLASSES_NAMES } from "./constants.js";
 
 const scrapeFightersWhoHaveAMatchup = async (url, page) => {
-  const scrapedFightersWithAMatchup = [];
+  const scrapedFightersWithAMatchup = {};
+  // const scrapedFightersWithAMatchup = [];
   await page.goto(url);
   await closeCookiesModal(page);
   //tu będzie loop na wchodzenie do kolejnych eventów
@@ -152,8 +153,17 @@ const scrapeFightersWhoHaveAMatchup = async (url, page) => {
             shouldUseRegularSelectors
           );
           // if the length equals 1, that means that only the weightclass was scraped, so there are no ranked fighters in that fight
-          if (infoScrapedFromASingleFight.length !== 1) {
-            scrapedFightersWithAMatchup.push(infoScrapedFromASingleFight);
+          if (infoScrapedFromASingleFight.namesOfFighters.length !== 0) {
+            scrapedFightersWithAMatchup[
+              infoScrapedFromASingleFight.weightClassOfTheFight
+            ]
+              ? scrapedFightersWithAMatchup[
+                  infoScrapedFromASingleFight.weightClassOfTheFight
+                ].push(...infoScrapedFromASingleFight.namesOfFighters)
+              : (scrapedFightersWithAMatchup[
+                  infoScrapedFromASingleFight.weightClassOfTheFight
+                ] = infoScrapedFromASingleFight.namesOfFighters);
+            // scrapedFightersWithAMatchup.push(infoScrapedFromASingleFight);
           }
         }
       }
@@ -205,12 +215,13 @@ const scrapeInfoFromASingleFight = async (
   console.log("halo", nameOfOneFighter);
   console.log("halo", nameOfOtherFighter);
   console.log("halo", weightClassOfTheFight);
-  const namesOfFightersAndWeightclass = [
+  const namesOfFighters = [
     nameOfOneFighter,
     nameOfOtherFighter,
-    weightClassOfTheFight,
+    // weightClassOfTheFight,
   ].filter((el) => el);
-  return namesOfFightersAndWeightclass;
+
+  return { namesOfFighters, weightClassOfTheFight };
   // return [nameOfOneFighter, nameOfOtherFighter, weightClassOfTheFight]
 };
 

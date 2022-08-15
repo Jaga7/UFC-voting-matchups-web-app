@@ -12,7 +12,7 @@ async function scrapeFighters() {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
-  const allRankedFighters = await scrapeAllFighters(URL_UFC_RANKINGS, page);
+  // const allRankedFighters = await scrapeAllFighters(URL_UFC_RANKINGS, page);
   const fightersWhoHaveAMatchup = await scrapeFightersWhoHaveAMatchup(
     URL_UFC_UPCOMING_EVENTS,
     page

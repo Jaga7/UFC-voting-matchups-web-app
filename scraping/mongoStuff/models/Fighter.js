@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const { Schema } = mongoose;
 
 const FighterSchema = new Schema({
@@ -28,8 +29,8 @@ const FighterSchema = new Schema({
 
   matchups: [
     {
-      type: Schema.Types.ObjectId,
-      ref: "Matchup", 
+      matchupId: { type: Schema.Types.ObjectId, ref: "Matchup" },
+      opponentId: { type: Schema.Types.ObjectId, ref: "Fighter" },
       //   required: [true, "Please provide matchups"],
     },
   ],

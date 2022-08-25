@@ -1,7 +1,7 @@
 // const mongoose = require("mongoose");
 import mongoose from "mongoose";
 import { readFileSync } from "node:fs";
-import Fighter from "./models/Fighter.js";
+import Fighter from "../../models/Fighter.js";
 // import Matchup from "./models/Matchup.js";
 
 mongoose

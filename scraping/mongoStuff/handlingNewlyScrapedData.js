@@ -1,8 +1,8 @@
 // const mongoose = require("mongoose");
 import mongoose from "mongoose";
 import { readFileSync } from "node:fs";
-import Fighter from "./models/Fighter.js";
-import Matchup from "./models/Matchup.js";
+import Fighter from "../../models/Fighter.js";
+import Matchup from "../../models/Matchup.js";
 
 mongoose
   .connect("mongodb://localhost:27017/UFC_APP_TESTING")

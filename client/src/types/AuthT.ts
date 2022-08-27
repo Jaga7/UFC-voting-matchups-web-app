@@ -9,9 +9,10 @@ export interface AuthState {
   currentUser: UserT | null;
   isLoading: boolean;
   error: string;
+  token: string | null;
 }
 
-export type RegisterResponseT = {
+export type RegisterOrLoginResponseT = {
   user: UserT;
   token: string;
 };

@@ -1,7 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-import Home from "./pages/dashboard/Home";
-import Login from "./pages/Login/Login";
-import Register from "./pages/Register/Register";
+import { SharedLayout, Home, Logout } from "./pages/dashboard";
+import Auth from "./pages/Auth/Auth";
 
 import useColorTheme from "./hooks/useColorTheme";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -16,9 +15,11 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='login' element={<Login />} />
-        <Route path='register' element={<Register />} />
+        <Route path='/' element={<SharedLayout />}>
+          <Route index element={<Home />} />
+          <Route path='logout' element={<Logout />} />
+        </Route>
+        <Route path='auth' element={<Auth />} />
       </Routes>
       <ToastContainer autoClose={3000} />
     </ThemeProvider>

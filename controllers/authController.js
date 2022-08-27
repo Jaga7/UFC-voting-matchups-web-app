@@ -8,7 +8,6 @@ const register = async (req, res) => {
 
   if (!username || !password) {
     throw new BadRequestError(`please provide all values`);
-    // throw new BadRequestError(`please provide all values`);
   }
 
   const userAlreadyExists = await User.findOne({ username });
@@ -48,7 +47,6 @@ const login = async (req, res) => {
     user,
     token,
   });
-  res.send("login user");
 };
 
 const updateUser = async (req, res) => {

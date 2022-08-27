@@ -1,6 +1,6 @@
 export type UserT = {
   id: number;
-  name: string;
+  username: string;
   options?: { colorTheme: string };
 };
 

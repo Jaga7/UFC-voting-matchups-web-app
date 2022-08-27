@@ -1,25 +1,17 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
-import { loginUserByToken } from "../features/auth/authAsyncActions";
+import { useAppSelector } from "../hooks/reduxHooks";
 
 function useAuthStatus() {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const authState = useAppSelector((state) => state.authReducer);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
     if (!token) {
-      navigate("/login");
-    } else {
-      if (token && !authState.isLoading) {
-        if (!authState.currentUser) {
-          dispatch(loginUserByToken(+token));
-        }
-      }
+      navigate("/auth");
     }
-  }, [navigate, authState.currentUser, dispatch, token]);
+  }, [navigate, authState.currentUser, token]);
 
   return authState.currentUser;
 }

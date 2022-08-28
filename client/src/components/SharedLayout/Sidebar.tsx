@@ -11,7 +11,13 @@ import {
   Typography,
   ListItem,
 } from "@mui/material";
-import { Home, Logout, ModeNight, SportsMma } from "@mui/icons-material";
+import {
+  Home,
+  Logout,
+  ModeNight,
+  SportsMma,
+  SportsKabaddi,
+} from "@mui/icons-material";
 
 import { useAppSelector } from "../../hooks/reduxHooks";
 import ColorThemeToggle from "../ColorThemeToggle/ColorThemeToggle";
@@ -86,6 +92,9 @@ const Sidebar = () => {
           <Divider light />
           <MenuButton text={"Home"} url='/'>
             <Home color='secondary' />
+          </MenuButton>
+          <MenuButton text={"Vote"} url='/fighters/Bantamweight'>
+            <SportsKabaddi color='secondary' />
           </MenuButton>
 
           <Divider light />

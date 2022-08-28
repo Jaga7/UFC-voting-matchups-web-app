@@ -19,6 +19,7 @@ import connectDB from "./db/connect.js";
 
 // routers
 import authRouter from "./routes/authRoutes.js";
+import fightersRouter from "./routes/fightersRoutes.js";
 
 // middleware
 import notFoundMiddleware from "./middleware/not-found.js";
@@ -40,6 +41,8 @@ app.use(express.json());
 // app.use(mongoSanitize())
 
 app.use("/api/v1/auth", authRouter);
+
+app.use("/api/v1/fighters", authenticateUser, fightersRouter);
 
 // app.get('*', function (request, response) {
 //   response.sendFile(path.resolve(__dirname, './client/build', 'index.html'))

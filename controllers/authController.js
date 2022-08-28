@@ -4,7 +4,6 @@ import { BadRequestError, UnauthorizedError } from "../errors/index.js";
 
 const register = async (req, res) => {
   const { username, password } = req.body;
-  console.log(`register, username:${username}, password:${password}`);
 
   if (!username || !password) {
     throw new BadRequestError(`please provide all values`);

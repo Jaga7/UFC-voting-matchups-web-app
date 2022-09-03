@@ -27,24 +27,8 @@ const FighterSchema = new Schema({
     required: [true, "Please provide weightclass"],
   },
 
-  matchups: [
-    {
-      matchupId: { type: Schema.Types.ObjectId, ref: "Matchup" },
-      opponentId: { type: Schema.Types.ObjectId, ref: "Fighter" },
-      //   required: [true, "Please provide matchups"],
-    },
-  ],
-  //   image_url:
-  //   matchups: [{ body: String, date: Date }],
-
-  //   body: String,
-  //   comments: [{ body: String, date: Date }],
-  //   date: { type: Date, default: Date.now },
-  //   hidden: Boolean,
-  //   meta: {
-  //     votes: Number,
-  //     favs: Number,
-  //   },
+  // image_url
+  // rank_or_champion
 });
 
 export default mongoose.model("Fighter", FighterSchema);

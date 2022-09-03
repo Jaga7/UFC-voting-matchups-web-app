@@ -22,7 +22,6 @@ import {
 import { useAppSelector } from "../../hooks/reduxHooks";
 import ColorThemeToggle from "../ColorThemeToggle/ColorThemeToggle";
 
-// Trzeba przerobić na osobne komponenty
 export const UnStyledLink = styled(NavLink)(({ theme }) => ({
   color: theme.palette.primary.main,
   textDecoration: "none",

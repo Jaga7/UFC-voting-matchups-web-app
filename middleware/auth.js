@@ -3,7 +3,6 @@ import { UnauthorizedError } from "../errors/index.js";
 
 const auth = async (req, res, next) => {
   const authHeader = req.headers.authorization;
-
   console.log(`authHeader: ${authHeader}`);
   if (!authHeader || !authHeader.startsWith("Bearer")) {
     throw new UnauthorizedError("Authentication Invalid");

@@ -20,6 +20,7 @@ import connectDB from "./db/connect.js";
 // routers
 import authRouter from "./routes/authRoutes.js";
 import fightersRouter from "./routes/fightersRoutes.js";
+import matchupsRouter from "./routes/matchupsRoutes.js";
 
 // middleware
 import notFoundMiddleware from "./middleware/not-found.js";
@@ -44,6 +45,8 @@ app.use("/api/v1/auth", authRouter);
 
 app.use("/api/v1/fighters", authenticateUser, fightersRouter);
 
+app.use("/api/v1/matchups", authenticateUser, matchupsRouter);
+
 // app.get('*', function (request, response) {
 //   response.sendFile(path.resolve(__dirname, './client/build', 'index.html'))
 // })
@@ -52,9 +55,6 @@ app.get("/", (req, res) => {
   res.send("Welcome!");
 });
 
-app.use("/kur", (req, res) => {
-  res.json("nosz kurwa!");
-});
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 

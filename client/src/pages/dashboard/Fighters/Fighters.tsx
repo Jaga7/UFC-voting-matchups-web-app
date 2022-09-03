@@ -6,6 +6,7 @@ import Header from "../../../components/Header/Header";
 
 import FighterCard from "../../../components/Fighter/FighterCard";
 import FighterMenu from "../../../components/Fighter/FighterMenu";
+import FighterSplitButton from "../../../components/Fighter/FighterSplitButton";
 import { Box, Pagination, useMediaQuery } from "@mui/material";
 
 import FighterCardSkeleton from "../../../components/Fighter/FighterCardSkeleton";
@@ -27,35 +28,48 @@ const FightersPage = () => {
   const { weightclass } = useParams();
 
   const queryWeightclass =
-    weightclass === "Bantamweight"
+    weightclass === "Flyweight"
+      ? "Flyweight"
+      : weightclass === "Bantamweight"
       ? "Bantamweight"
+      : weightclass === "Featherweight"
+      ? "Featherweight"
       : weightclass === "Lightweight"
       ? "Lightweight"
+      : weightclass === "Welterweight"
+      ? "Welterweight"
+      : weightclass === "Middleweight"
+      ? "Middleweight"
+      : weightclass === "LightHeavyweight"
+      ? "LightHeavyweight"
+      : weightclass === "Heavyweight"
+      ? "Heavyweight"
+      : weightclass === "womenStrawweight"
+      ? "womenStrawweight"
+      : weightclass === "womenFlyweight"
+      ? "womenFlyweight"
+      : weightclass === "womenBantamweight"
+      ? "womenBantamweight"
       : "all";
 
   const amountOfFightersPerPage = 10;
   const { data, refetch } = useGetFightersQuery({
     weightclass: queryWeightclass,
-    // page: page,  gdzieś indziej page trzeba używać
+    // page: page,
     amount: amountOfFightersPerPage,
   });
 
   useEffect(() => {
     console.log("WEIGHTCLASS", weightclass);
 
-    // if (
-    //   weightclass !== "Bantamweight" &&
-    //   weightclass !== "Lightweight"
-    // ) {
-    //   navigate("/fighters/Bantamweight");
-    // }
     setPage(1);
   }, [weightclass, navigate]);
 
   return (
     <>
       <Header subheader={false} title='Fighters' />
-      <FighterMenu />
+      {/* <FighterMenu /> */}
+      <FighterSplitButton />
       <Box
         display={"grid"}
         gridTemplateColumns={matches ? `repeat(2, 1fr)` : "repeat(1, 1fr)"}
@@ -70,7 +84,13 @@ const FightersPage = () => {
               page * amountOfFightersPerPage
             )
             .map((el: FighterT) => (
-              <FighterCard key={el._id} fighter={el}></FighterCard>
+              <FighterCard
+                key={el._id}
+                fighter={el}
+                opponents={data.response.fighters.filter(
+                  (fighter) => fighter._id !== el._id
+                )}
+              ></FighterCard>
             ))
         ) : (
           <>

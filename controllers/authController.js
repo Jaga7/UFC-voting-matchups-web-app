@@ -21,6 +21,7 @@ const register = async (req, res) => {
 
   res.status(StatusCodes.CREATED).json({
     user: {
+      _id: user._id,
       username: user.username,
     },
     token,

@@ -15,9 +15,27 @@ function FighterMenu() {
       zIndex='999'
     >
       <ButtonGroup fullWidth>
-        <SubMenuButton text='All' url='/fighters/' />
+        <SubMenuButton text='All' url='/fighters/all' />
+        <SubMenuButton text='Flyweight' url='/fighters/Flyweight' />
         <SubMenuButton text='Bantamweight' url='/fighters/Bantamweight' />
+        <SubMenuButton text='Featherweight' url='/fighters/Featherweight' />
         <SubMenuButton text='Lightweight' url='/fighters/Lightweight' />
+        <SubMenuButton text='Welterweight' url='/fighters/Welterweight' />
+        <SubMenuButton text='Middleweight' url='/fighters/Middleweight' />
+        <SubMenuButton
+          text='LightHeavyweight'
+          url='/fighters/LightHeavyweight'
+        />
+        <SubMenuButton text='Heavyweight' url='/fighters/Heavyweight' />
+        <SubMenuButton
+          text='womenStrawweight'
+          url='/fighters/womenStrawweight'
+        />
+        <SubMenuButton text='womenFlyweight' url='/fighters/womenFlyweight' />
+        <SubMenuButton
+          text='womenBantamweight'
+          url='/fighters/womenBantamweight'
+        />
       </ButtonGroup>
     </Box>
   );

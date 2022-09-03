@@ -6,16 +6,15 @@ const MatchupSchema = new Schema({
     {
       type: mongoose.Types.ObjectId,
       ref: "Fighter",
-      // required: [true, "Please provide matched-up fighter"],
+      required: [true, "Please provide matched-up fighter"],
     },
   ],
-  //   matched_fighters: {type:[mongoose.Types.ObjectId],length:2},
+  matched_fighters: { type: [mongoose.Types.ObjectId], length: 2 },
   ids_of_voters: [
     {
-      type: Number,
-      // type: mongoose.Types.ObjectId,
-      // ref: "User",
-      // required: [true, "Please provide voting user"],
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      required: [true, "Please provide voting user"],
     },
   ],
 });

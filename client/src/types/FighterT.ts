@@ -15,5 +15,5 @@ export type FighterT = {
   _id: string;
   fullname: string;
   weightclass: WeighclassTypes;
-  matchups: { matchupId: number; opponentId: number }[];
+  // matchups: { matchupId: number; opponentId: number }[];
 };

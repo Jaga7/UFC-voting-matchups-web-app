@@ -12,7 +12,6 @@ const Logout = () => {
     if (token) {
       dispatch(logoutUser());
       navigate("/auth");
-      // or navigate to home page
     } else {
       navigate("/auth");
     }

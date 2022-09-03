@@ -1,4 +1,10 @@
-import { useTheme } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  useTheme,
+} from "@mui/material";
 
 import {
   Card,
@@ -8,12 +14,55 @@ import {
   Avatar,
   Box,
 } from "@mui/material";
+import { useState } from "react";
 
 import { FighterT } from "../../types/FighterT";
 
-const FighterCard = ({ fighter }: { fighter: FighterT }) => {
-  const theme = useTheme();
+import {
+  useGetAMatchupQuery,
+  usePatchMatchupMutation,
+} from "../../services/matchups-service";
+import { voteForMatchup } from "../../features/matchups/matchupsAsyncActions";
+import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
+import { AuthState } from "../../types/AuthT";
 
+const FighterCard = ({
+  fighter,
+  opponents,
+}: {
+  fighter: FighterT;
+  opponents: FighterT[];
+}) => {
+  const theme = useTheme();
+  const dispatch = useAppDispatch();
+
+  const authState: AuthState = useAppSelector((state) => state.authReducer);
+
+  const [selectedOpponentId, setSelectedOpponentId] = useState(null);
+  const handleChange = async (e: any) => {
+    e.preventDefault();
+    setSelectedOpponentId(e.target.value);
+    console.log(
+      "siema",
+      fighter.fullname,
+      e.target.value,
+      opponents.find((opponent) => opponent._id === e.target.value)?.fullname
+    );
+    try {
+      const promiseResponse = dispatch(
+        voteForMatchup({
+          fightersIds: {
+            oneFighterId: fighter._id,
+            otherFighterId: e.target.value,
+          },
+          voterId: authState.currentUser!._id,
+        })
+      ).unwrap();
+      console.log(`i jaki ten promiseResponse: ${promiseResponse}`);
+    } catch (rejectedValueOrSerializedError: any) {
+      throw Error(rejectedValueOrSerializedError);
+    }
+  };
   return (
     <>
       <Card>
@@ -49,9 +98,24 @@ const FighterCard = ({ fighter }: { fighter: FighterT }) => {
             justifyContent='space-between'
           >
             <Typography variant='body2' color='text.secondary'>
-              <strong>Matchups: </strong>
-              {fighter.matchups.length}
+              <strong>Opponents: </strong>
             </Typography>
+            <FormControl fullWidth>
+              <InputLabel id='demo-simple-select-label'>Opponent</InputLabel>
+              <Select
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                value={selectedOpponentId || opponents[0]._id}
+                label='Opponent'
+                onChange={handleChange}
+              >
+                {opponents.map((opponent) => (
+                  <MenuItem key={opponent._id} value={opponent._id}>
+                    {opponent.fullname}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Box>
         </CardContent>
       </Card>

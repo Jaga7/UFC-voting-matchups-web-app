@@ -1,5 +1,5 @@
 export type UserT = {
-  id: number;
+  _id: string;
   username: string;
   options?: { colorTheme: string };
 };

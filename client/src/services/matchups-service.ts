@@ -1,13 +1,33 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
+import { RootState } from "../app/store";
 import { MatchupNewT, MatchupT } from "../types/MatchupT";
+import { MatchupQueryT } from "../types/MatchupQueryT";
 import { FighterT } from "../types/FighterT";
 
 export const matchupsAPI = createApi({
   reducerPath: "matchupPath",
-  baseQuery: fetchBaseQuery({}),
+  baseQuery: fetchBaseQuery({
+    prepareHeaders: (headers, { getState }) => {
+      const token = (getState() as RootState).authReducer.token;
+      headers.set("Authorization", `Bearer ${token}`);
+      return headers;
+    },
+  }),
   tagTypes: ["Matchups"],
   endpoints: (build) => ({
+    getMatchups: build.query<
+      MatchupT[], // or null?
+      MatchupQueryT | void
+    >({
+      query: (options) => ({
+        url: "/api/v1/matchups",
+        params: {
+          weightclass: options?.weightclass,
+        },
+      }),
+
+      providesTags: ["Matchups"],
+    }),
     getAMatchup: build.query<
       MatchupT,
       {
@@ -45,6 +65,7 @@ export const matchupsAPI = createApi({
 });
 
 export const {
+  useGetMatchupsQuery,
   useGetAMatchupQuery,
   useAddMatchupMutation,
   usePatchMatchupMutation,

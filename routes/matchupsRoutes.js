@@ -2,12 +2,12 @@ import express from "express";
 const router = express.Router();
 
 import {
-  getAMatchup,
+  getMatchups,
   createMatchup,
   appendVoteToMatchup,
 } from "../controllers/matchupsController.js";
 
-router.route("/").post(createMatchup).get(getAMatchup);
+router.route("/").post(createMatchup).get(getMatchups);
 // place before :id
 router.route("/:id").patch(appendVoteToMatchup);
 

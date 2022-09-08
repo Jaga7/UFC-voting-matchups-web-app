@@ -7,12 +7,14 @@ import { ErrorCatcher } from "../services/middleware/error";
 import { CurriedGetDefaultMiddleware } from "@reduxjs/toolkit/dist/getDefaultMiddleware";
 import { authMiddleware } from "./middleware/authMiddleware";
 import { fightersAPI } from "../services/fighters-service";
+import { matchupsAPI } from "../services/matchups-service";
 
 const rootReducer = combineReducers({
   authReducer,
   colorThemeReducer,
   matchupsReducer,
   [fightersAPI.reducerPath]: fightersAPI.reducer,
+  [matchupsAPI.reducerPath]: matchupsAPI.reducer,
 });
 
 export const setupStore = () => {
@@ -22,6 +24,7 @@ export const setupStore = () => {
       getDefaultMiddleware().concat(
         ErrorCatcher,
         fightersAPI.middleware,
+        matchupsAPI.middleware,
         authMiddleware
       ),
   });

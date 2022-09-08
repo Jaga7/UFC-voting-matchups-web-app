@@ -17,6 +17,23 @@ const MatchupSchema = new Schema({
       required: [true, "Please provide voting user"],
     },
   ],
+  weightclass: {
+    type: String,
+    enum: [
+      "Flyweight",
+      "Bantamweight",
+      "Featherweight",
+      "Lightweight",
+      "Welterweight",
+      "Middleweight",
+      "LightHeavyweight",
+      "Heavyweight",
+      "womenStrawweight",
+      "womenFlyweight",
+      "womenBantamweight",
+    ],
+    required: [true, "Please provide weightclass"],
+  },
 });
 
 export default mongoose.model("Matchup", MatchupSchema);

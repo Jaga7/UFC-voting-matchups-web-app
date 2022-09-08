@@ -5,6 +5,7 @@ import { MatchupT } from "../../types/MatchupT";
 
 import { RegisterOrLoginResponseT } from "../../types/AuthT";
 import { RootState } from "../../app/store";
+import { WeightclassEnumT } from "../../types/WeightClassEnumT";
 
 // const matchupFetch = axios.create({
 //   baseURL: "/api/v1",
@@ -23,9 +24,10 @@ import { RootState } from "../../app/store";
 export const voteForMatchup = createAsyncThunk(
   "matchups/voteForMatchup",
   async (
-    fightersIdsAndVoterId: {
+    fightersIdsAndVoterIdAndWeightclass: {
       fightersIds: { oneFighterId: string; otherFighterId: string };
       voterId: string;
+      weightclass: WeightclassEnumT;
     },
     thunkAPI
   ) => {
@@ -35,20 +37,20 @@ export const voteForMatchup = createAsyncThunk(
     };
     try {
       const response = await axios.get(
-        `/api/v1/matchups?oneFighterId=${fightersIdsAndVoterId.fightersIds.oneFighterId}&otherFighterId=${fightersIdsAndVoterId.fightersIds.otherFighterId}`,
+        `/api/v1/matchups?oneFighterId=${fightersIdsAndVoterIdAndWeightclass.fightersIds.oneFighterId}&otherFighterId=${fightersIdsAndVoterIdAndWeightclass.fightersIds.otherFighterId}`,
         { headers: authHeader }
       );
       if (response.data !== null) {
         const responseFromPatch = await axios.patch(
           `/api/v1/matchups/${response.data.matchup._id}`,
-          fightersIdsAndVoterId,
+          fightersIdsAndVoterIdAndWeightclass,
           { headers: authHeader }
         );
         return responseFromPatch.data;
       } else {
         const responseFromPost = await axios.post(
           `/api/v1/matchups`,
-          fightersIdsAndVoterId,
+          fightersIdsAndVoterIdAndWeightclass,
           { headers: authHeader }
         );
         return responseFromPost.data;

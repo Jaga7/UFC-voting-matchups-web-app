@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetFightersQuery } from "../../../services/fighters-service";
+import { useGetMatchupsQuery } from "../../../services/matchups-service";
 
 import Header from "../../../components/Header/Header";
 
@@ -11,6 +12,7 @@ import { Box, Pagination, useMediaQuery } from "@mui/material";
 
 import FighterCardSkeleton from "../../../components/Fighter/FighterCardSkeleton";
 import { FighterT } from "../../../types/FighterT";
+import { WeightclassEnumT } from "../../../types/WeightClassEnumT";
 
 const FightersPage = () => {
   const matches = useMediaQuery("(min-width:960px)");
@@ -28,29 +30,7 @@ const FightersPage = () => {
   const { weightclass } = useParams();
 
   const queryWeightclass =
-    weightclass === "Flyweight"
-      ? "Flyweight"
-      : weightclass === "Bantamweight"
-      ? "Bantamweight"
-      : weightclass === "Featherweight"
-      ? "Featherweight"
-      : weightclass === "Lightweight"
-      ? "Lightweight"
-      : weightclass === "Welterweight"
-      ? "Welterweight"
-      : weightclass === "Middleweight"
-      ? "Middleweight"
-      : weightclass === "LightHeavyweight"
-      ? "LightHeavyweight"
-      : weightclass === "Heavyweight"
-      ? "Heavyweight"
-      : weightclass === "womenStrawweight"
-      ? "womenStrawweight"
-      : weightclass === "womenFlyweight"
-      ? "womenFlyweight"
-      : weightclass === "womenBantamweight"
-      ? "womenBantamweight"
-      : "all";
+    WeightclassEnumT[weightclass as keyof typeof WeightclassEnumT] || "all";
 
   const amountOfFightersPerPage = 10;
   const { data, refetch } = useGetFightersQuery({
@@ -59,11 +39,17 @@ const FightersPage = () => {
     amount: amountOfFightersPerPage,
   });
 
-  useEffect(() => {
-    console.log("WEIGHTCLASS", weightclass);
+  const { data: matchups, isFetching: areMatchupsFetching } =
+    useGetMatchupsQuery({
+      weightclass: queryWeightclass,
+    });
 
-    setPage(1);
-  }, [weightclass, navigate]);
+  // może potem się uda
+  // const handleClick = (e: React.MouseEvent) => {
+  //   const clickedElement = e.target as HTMLElement;
+  //   const parentFighterCard = clickedElement.closest(".MuiCard-root");
+  //   console.log("aaaaaaa:", parentFighterCard);
+  // };
 
   return (
     <>
@@ -76,8 +62,9 @@ const FightersPage = () => {
         width='90%'
         columnGap='3em'
         rowGap='1.5em'
+        // onClick={handleClick}
       >
-        {data && data.response ? (
+        {data && data.response && matchups ? (
           data.response.fighters
             .slice(
               (page - 1) * amountOfFightersPerPage,
@@ -90,6 +77,15 @@ const FightersPage = () => {
                 opponents={data.response.fighters.filter(
                   (fighter) => fighter._id !== el._id
                 )}
+                matchupsOfFighter={
+                  matchups.length
+                    ? matchups.filter((matchup) =>
+                        matchup.matched_fighters.some(
+                          (fighterId) => fighterId === el._id
+                        )
+                      )
+                    : []
+                }
               ></FighterCard>
             ))
         ) : (
@@ -112,6 +108,7 @@ const FightersPage = () => {
         {data && data.response && (
           <Pagination
             defaultPage={1}
+            page={page}
             count={Math.ceil(data.response.numOfPages)}
             disabled={Math.ceil(data.response.numOfPages) < 2}
             onChange={handlePaginationClick}

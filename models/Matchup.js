@@ -18,7 +18,7 @@ const MatchupSchema = new Schema({
     },
   ],
   weightclass: {
-    type: String,
+    /*for querying for example for a Heavyweight tab*/ type: String,
     enum: [
       "Flyweight",
       "Bantamweight",

@@ -7,28 +7,10 @@ import { RegisterOrLoginResponseT } from "../../types/AuthT";
 import { RootState } from "../../app/store";
 import { WeightclassEnumT } from "../../types/WeightClassEnumT";
 
-// const matchupFetch = axios.create({
-//   baseURL: "/api/v1",
-// });
-
-// matchupFetch.interceptors.request.use(
-//   (config) => {
-//     config.headers.common["Authorization"] = `Bearer ${state.token}`;
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   }
-// );
-
-export const voteForMatchup = createAsyncThunk(
-  "matchups/voteForMatchup",
+export const getAMatchup = createAsyncThunk(
+  "matchups/getMatchup",
   async (
-    fightersIdsAndVoterIdAndWeightclass: {
-      fightersIds: { oneFighterId: string; otherFighterId: string };
-      voterId: string;
-      weightclass: WeightclassEnumT;
-    },
+    fightersIds: { oneFighterId: string; otherFighterId: string },
     thunkAPI
   ) => {
     const token = (thunkAPI.getState() as RootState).authReducer.token;
@@ -37,24 +19,14 @@ export const voteForMatchup = createAsyncThunk(
     };
     try {
       const response = await axios.get(
-        `/api/v1/matchups?oneFighterId=${fightersIdsAndVoterIdAndWeightclass.fightersIds.oneFighterId}&otherFighterId=${fightersIdsAndVoterIdAndWeightclass.fightersIds.otherFighterId}`,
+        `/api/v1/matchups?oneFighterId=${fightersIds.oneFighterId}&otherFighterId=${fightersIds.otherFighterId}`,
         { headers: authHeader }
       );
-      if (response.data !== null) {
-        const responseFromPatch = await axios.patch(
-          `/api/v1/matchups/${response.data.matchup._id}`,
-          fightersIdsAndVoterIdAndWeightclass,
-          { headers: authHeader }
-        );
-        return responseFromPatch.data;
-      } else {
-        const responseFromPost = await axios.post(
-          `/api/v1/matchups`,
-          fightersIdsAndVoterIdAndWeightclass,
-          { headers: authHeader }
-        );
-        return responseFromPost.data;
+      if (response.data === null) {
+        return null;
       }
+      console.log("RESPOSNSE", response.data);
+      return response;
     } catch (e) {
       if (e instanceof Error || e instanceof AxiosError) {
         return thunkAPI.rejectWithValue(e.message);

@@ -1,5 +1,7 @@
 import { WeightclassEnumT } from "./WeightClassEnumT";
 
 export type MatchupQueryT = {
-  weightclass: WeightclassEnumT | void | "all";
+  weightclass?: WeightclassEnumT | void | "all";
+  oneFighterId?: string;
+  otherFighterId?: string;
 };

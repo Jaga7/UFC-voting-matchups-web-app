@@ -1,10 +1,4 @@
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  useTheme,
-} from "@mui/material";
+import { useTheme } from "@mui/material";
 
 import {
   Card,
@@ -15,18 +9,17 @@ import {
   Box,
   Button,
 } from "@mui/material";
-import { useState } from "react";
 
 import { FighterT } from "../../types/FighterT";
 
 import {
-  useGetAMatchupQuery,
   usePatchMatchupMutation,
+  useAddMatchupMutation,
 } from "../../services/matchups-service";
-import { voteForMatchup } from "../../features/matchups/matchupsAsyncActions";
 import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
 import { AuthState } from "../../types/AuthT";
 import { MatchupT } from "../../types/MatchupT";
+import { voteForMatchup } from "../../shared/utils/MatchupUtils";
 
 const FighterCard = ({
   fighter,
@@ -42,31 +35,9 @@ const FighterCard = ({
 
   const authState: AuthState = useAppSelector((state) => state.authReducer);
 
-  // const [selectedOpponentId, setSelectedOpponentId] = useState(null);
-  // const handleChange = async (e: any) => {
-  //   e.preventDefault();
-  //   setSelectedOpponentId(e.target.value);
-  //   console.log(
-  //     "siema",
-  //     fighter.fullname,
-  //     e.target.value,
-  //     opponents.find((opponent) => opponent._id === e.target.value)?.fullname
-  //   );
-  //   try {
-  //     const promiseResponse = dispatch(
-  //       voteForMatchup({
-  //         fightersIds: {
-  //           oneFighterId: fighter._id,
-  //           otherFighterId: e.target.value,
-  //         },
-  //         voterId: authState.currentUser!._id,
-  //       })
-  //     ).unwrap();
-  //     console.log(`i jaki ten promiseResponse: ${promiseResponse}`);
-  //   } catch (rejectedValueOrSerializedError: any) {
-  //     throw Error(rejectedValueOrSerializedError);
-  //   }
-  // };
+  const [patchMatchup] = usePatchMatchupMutation();
+  const [addMatchup] = useAddMatchupMutation();
+
   return (
     <>
       <Card>
@@ -94,33 +65,6 @@ const FighterCard = ({
           />
         </Box>
         <CardContent>
-          {/* <Box
-            display='flex'
-            flexDirection='row'
-            flexWrap='wrap'
-            gap='1em'
-            justifyContent='space-between'
-          >
-            <Typography variant='body2' color='text.secondary'>
-              <strong>Opponents: </strong>
-            </Typography>
-            <FormControl fullWidth>
-              <InputLabel id='demo-simple-select-label'>Opponent</InputLabel>
-              <Select
-                labelId='demo-simple-select-label'
-                id='demo-simple-select'
-                value={selectedOpponentId || opponents[0]._id}
-                label='Opponent'
-                onChange={handleChange}
-              >
-                {opponents.map((opponent) => (
-                  <MenuItem key={opponent._id} value={opponent._id}>
-                    {opponent.fullname}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box> */}
           <Box
             onClick={(e) => {
               const clickedButton = e.target as HTMLButtonElement;
@@ -130,16 +74,15 @@ const FighterCard = ({
                 (opponent) => opponent.fullname === nameOfChosenOpponent
               )!._id;
 
-              dispatch(
-                voteForMatchup({
-                  fightersIds: {
-                    oneFighterId: fighter._id,
-                    otherFighterId: idOfChosenOpponent,
-                  },
-                  voterId: authState.currentUser!._id,
-                  weightclass: fighter.weightclass,
-                })
-              );
+              voteForMatchup({
+                idOfChosenOpponent,
+                fighterId: fighter._id,
+                voterId: authState.currentUser!._id,
+                weightclass: fighter.weightclass,
+                dispatch,
+                patchMatchup,
+                addMatchup,
+              });
             }}
             display='flex'
             flexDirection='row'

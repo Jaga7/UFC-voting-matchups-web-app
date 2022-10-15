@@ -1,8 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../app/store";
-import { MatchupNewT, MatchupT } from "../types/MatchupT";
+import { MatchupCreatingT, MatchupT, VoteForMatchupT } from "../types/MatchupT";
 import { MatchupQueryT } from "../types/MatchupQueryT";
-import { FighterT } from "../types/FighterT";
 
 export const matchupsAPI = createApi({
   reducerPath: "matchupPath",
@@ -15,45 +14,31 @@ export const matchupsAPI = createApi({
   }),
   tagTypes: ["Matchups"],
   endpoints: (build) => ({
-    getMatchups: build.query<
-      MatchupT[], // or null?
-      MatchupQueryT | void
-    >({
+    getMatchups: build.query<MatchupT[], MatchupQueryT>({
       query: (options) => ({
         url: "/api/v1/matchups",
         params: {
           weightclass: options?.weightclass,
+          oneFighterId: options?.oneFighterId,
+          otherFighterId: options?.otherFighterId,
         },
       }),
 
       providesTags: ["Matchups"],
     }),
-    getAMatchup: build.query<
-      MatchupT,
-      {
-        oneFighterName: FighterT["fullname"];
-        otherFighterName: FighterT["fullname"];
-      }
-    >({
-      query: (fightersNames) => ({
-        url: `matchups`,
-        body: { ...fightersNames },
-      }),
-      providesTags: ["Matchups"],
-    }),
-    addMatchup: build.mutation<MatchupT, MatchupNewT>({
+    addMatchup: build.mutation<MatchupT, MatchupCreatingT>({
       query: (matchup) => {
         return {
-          url: "matchups",
+          url: "/api/v1/matchups",
           method: "POST",
           body: matchup,
         };
       },
       invalidatesTags: ["Matchups"],
     }),
-    patchMatchup: build.mutation<MatchupT, { id: string; [key: string]: any }>({
+    patchMatchup: build.mutation<MatchupT, VoteForMatchupT>({
       query: (options) => ({
-        url: `matchups/${options.id}`,
+        url: `/api/v1/matchups/${options.matchupId}`,
         method: "PATCH",
         body: {
           ...options,
@@ -66,7 +51,6 @@ export const matchupsAPI = createApi({
 
 export const {
   useGetMatchupsQuery,
-  useGetAMatchupQuery,
   useAddMatchupMutation,
   usePatchMatchupMutation,
 } = matchupsAPI;

@@ -21,6 +21,7 @@ export const matchupsAPI = createApi({
           weightclass: options?.weightclass,
           oneFighterId: options?.oneFighterId,
           otherFighterId: options?.otherFighterId,
+          getTopVoted: options?.getTopVoted,
         },
       }),
 

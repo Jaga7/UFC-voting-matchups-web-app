@@ -25,8 +25,7 @@ export const getAMatchup = createAsyncThunk(
       if (response.data === null) {
         return null;
       }
-      console.log("RESPOSNSE", response.data);
-      return response;
+      return response.data;
     } catch (e) {
       if (e instanceof Error || e instanceof AxiosError) {
         return thunkAPI.rejectWithValue(e.message);

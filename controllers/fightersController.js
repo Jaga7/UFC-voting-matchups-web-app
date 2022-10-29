@@ -2,8 +2,8 @@ import Fighter from "../models/Fighter.js";
 import { StatusCodes } from "http-status-codes";
 // import checkPermissions from "../utils/checkPermissions.js";
 
-const getAllFighters = async (req, res) => {
-  const { search, weightclass, sort } = req.query;
+const getFighters = async (req, res) => {
+  const { search, weightclass, sort, id } = req.query;
 
   const queryObject = {};
 
@@ -12,6 +12,9 @@ const getAllFighters = async (req, res) => {
   }
   if (search) {
     queryObject.position = { $regex: search, $options: "i" };
+  }
+  if (id) {
+    queryObject._id = { $in: id };
   }
 
   // NO AWAIT
@@ -38,4 +41,4 @@ const getAllFighters = async (req, res) => {
   res.status(StatusCodes.OK).json({ fighters, totalFighters, numOfPages });
 };
 
-export { getAllFighters };
+export { getFighters };

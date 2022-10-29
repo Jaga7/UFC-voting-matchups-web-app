@@ -94,9 +94,10 @@ const FighterCard = ({
               Opponents:
             </Typography>
             {opponents.map((opponent) => {
-              const thisMatchupVoters = matchupsOfFighter.find((matchup) =>
+              const thisMatchup = matchupsOfFighter.find((matchup) =>
                 matchup.matched_fighters.some((id) => id === opponent._id)
-              )?.ids_of_voters;
+              );
+              const thisMatchupVoters = thisMatchup?.ids_of_voters;
               const didCurrentUserVoteForThisMatchup = thisMatchupVoters?.find(
                 (voterId) => voterId === authState.currentUser!._id
               );
@@ -111,7 +112,7 @@ const FighterCard = ({
                   </Button>
                   <Typography>
                     votes:
-                    {thisMatchupVoters?.length || 0}
+                    {thisMatchup?.votersAmount || 0}
                   </Typography>
                 </Box>
               );

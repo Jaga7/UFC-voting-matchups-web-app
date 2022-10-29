@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import { BadRequestError, NotFoundError } from "../errors/index.js";
 
 const getMatchups = async (req, res) => {
-  const { oneFighterId, otherFighterId, weightclass } = req.query;
+  const { oneFighterId, otherFighterId, weightclass, getTopVoted } = req.query;
 
   const queryObject = {};
 
@@ -21,6 +21,9 @@ const getMatchups = async (req, res) => {
     result = Matchup.find(queryObject);
   }
 
+  if (getTopVoted) {
+    result = Matchup.find().sort({ votersAmount: -1 }).limit(6);
+  }
   const matchups = await result;
 
   res.status(StatusCodes.OK).json(matchups);
@@ -43,8 +46,8 @@ const toggleVoteForMatchup = async (req, res) => {
   const updatedMatchup = await Matchup.findOneAndUpdate(
     { _id: matchupId },
     hasUserAlreadyVotedForThatMatchup
-      ? { $pull: { ids_of_voters: voterId } }
-      : { $push: { ids_of_voters: voterId } },
+      ? { $pull: { ids_of_voters: voterId }, $inc: { votersAmount: -1 } }
+      : { $push: { ids_of_voters: voterId }, $inc: { votersAmount: 1 } },
     {
       new: true,
       runValidators: true,
@@ -64,6 +67,7 @@ const createMatchup = async (req, res) => {
   const matchup = await Matchup.create({
     matched_fighters: fightersIds,
     ids_of_voters: [voterId],
+    votersAmount: 1,
     weightclass: weightclass,
   });
   res.status(StatusCodes.CREATED).json({ matchup });

@@ -6,7 +6,6 @@ import { useGetMatchupsQuery } from "../../../services/matchups-service";
 import Header from "../../../components/Header/Header";
 
 import FighterCard from "../../../components/Fighter/FighterCard";
-import FighterMenu from "../../../components/Fighter/FighterMenu";
 import FighterSplitButton from "../../../components/Fighter/FighterSplitButton";
 import { Box, Pagination, useMediaQuery } from "@mui/material";
 
@@ -43,13 +42,6 @@ const FightersPage = () => {
     useGetMatchupsQuery({
       weightclass: queryWeightclass,
     });
-
-  // może potem się uda
-  // const handleClick = (e: React.MouseEvent) => {
-  //   const clickedElement = e.target as HTMLElement;
-  //   const parentFighterCard = clickedElement.closest(".MuiCard-root");
-  //   console.log("aaaaaaa:", parentFighterCard);
-  // };
 
   return (
     <>

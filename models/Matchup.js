@@ -17,6 +17,10 @@ const MatchupSchema = new Schema({
       required: [true, "Please provide voting user"],
     },
   ],
+  votersAmount: {
+    type: Number,
+    default: 0,
+  },
   weightclass: {
     /*for querying for example for a Heavyweight tab*/ type: String,
     enum: [

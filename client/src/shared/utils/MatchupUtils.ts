@@ -20,14 +20,14 @@ export const voteForMatchup = async ({
   addMatchup: any;
 }) => {
   try {
-    const response = await dispatch(
+    const fetchedMatchup = await dispatch(
       getAMatchup({
         oneFighterId: fighterId,
         otherFighterId: idOfChosenOpponent,
       })
     ).unwrap();
 
-    if (response == null) {
+    if (fetchedMatchup == null) {
       addMatchup({
         fightersIds: [fighterId, idOfChosenOpponent],
         voterId,
@@ -36,11 +36,11 @@ export const voteForMatchup = async ({
       toast.info(`You voted for a matchup`);
     } else {
       const hasUserAlreadyVotedForThatMatchup = Boolean(
-        response.data.ids_of_voters.find((id: string) => id === voterId)
+        fetchedMatchup.ids_of_voters.find((id: string) => id === voterId)
       );
 
       patchMatchup({
-        matchupId: response.data._id,
+        matchupId: fetchedMatchup._id,
         voterId,
         hasUserAlreadyVotedForThatMatchup,
       });

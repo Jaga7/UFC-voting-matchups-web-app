@@ -1,9 +1,9 @@
 import express from "express";
 const router = express.Router();
 
-import { getAllFighters } from "../controllers/fightersController.js";
+import { getFighters } from "../controllers/fightersController.js";
 
-router.route("/").get(getAllFighters);
+router.route("/").get(getFighters);
 // place before :id
 
 export default router;

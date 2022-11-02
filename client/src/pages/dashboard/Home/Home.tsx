@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import Header from "../../../components/Header/Header";
 import TopRatedMatchupCard from "../../../components/TopRatedMatchup/TopRatedMatchupCard";
+import TopRatedMatchupCardSkeleton from "../../../components/TopRatedMatchup/TopRatedMatchupCardSkeleton";
 import { useGetFightersByIdsQuery } from "../../../services/fighters-service";
 import { useGetMatchupsQuery } from "../../../services/matchups-service";
 
@@ -47,7 +48,7 @@ const Home = () => {
         columnGap='3em'
         rowGap='1.5em'
       >
-        {topMatchupsWithFighters &&
+        {topMatchupsWithFighters ? (
           topMatchupsWithFighters.map((matchupWithFighters) => {
             return (
               <TopRatedMatchupCard
@@ -55,7 +56,15 @@ const Home = () => {
                 matchupWithFighters={matchupWithFighters}
               />
             );
-          })}
+          })
+        ) : (
+          <>
+            <TopRatedMatchupCardSkeleton />
+            <TopRatedMatchupCardSkeleton />
+            <TopRatedMatchupCardSkeleton />
+            <TopRatedMatchupCardSkeleton />
+          </>
+        )}
       </Box>
     </>
   );

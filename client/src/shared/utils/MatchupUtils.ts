@@ -46,7 +46,7 @@ export const voteForMatchup = async ({
         weightclass,
       });
       const toastMessage = hasUserAlreadyVotedForThatMatchup
-        ? "You unvoted for a matchup"
+        ? "You unvoted a matchup"
         : "You voted for a matchup";
       toast.info(toastMessage);
     }

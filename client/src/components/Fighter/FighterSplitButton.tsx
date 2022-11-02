@@ -25,7 +25,11 @@ const options = [
   "womenBantamweight",
 ];
 
-export default function SplitButton() {
+export default function SplitButton({
+  setPage,
+}: {
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+}) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLDivElement>(null);
@@ -39,6 +43,7 @@ export default function SplitButton() {
     event: React.MouseEvent<HTMLLIElement, MouseEvent>,
     index: number
   ) => {
+    setPage(1);
     setSelectedIndex(index);
     setOpen(false);
     navigate(`/fighters/${options[index]}`);

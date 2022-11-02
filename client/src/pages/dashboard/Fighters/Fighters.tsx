@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetFightersQuery } from "../../../services/fighters-service";
 import { useGetMatchupsQuery } from "../../../services/matchups-service";
@@ -17,6 +17,7 @@ const FightersPage = () => {
   const matches = useMediaQuery("(min-width:960px)");
 
   const [page, setPage] = useState(1);
+
   const handlePaginationClick = (
     event: React.ChangeEvent<unknown>,
     page: number
@@ -31,7 +32,7 @@ const FightersPage = () => {
     WeightclassEnumT[weightclass as keyof typeof WeightclassEnumT] || "all";
 
   const amountOfFightersPerPage = 10;
-  const { data } = useGetFightersQuery({
+  const { data, isFetching: areUsersFetching } = useGetFightersQuery({
     weightclass: queryWeightclass,
     // page: page,
     amount: amountOfFightersPerPage,
@@ -45,7 +46,7 @@ const FightersPage = () => {
   return (
     <>
       <Header subheader={false} title='Fighters' />
-      <FighterSplitButton />
+      <FighterSplitButton setPage={setPage} />
       <Box
         display={"grid"}
         gridTemplateColumns={matches ? `repeat(2, 1fr)` : "repeat(1, 1fr)"}
@@ -54,7 +55,7 @@ const FightersPage = () => {
         rowGap='1.5em'
       >
         {/* {data && data.response && matchups ? ( */}
-        {data && data.response ? (
+        {!areUsersFetching && data && data.response ? (
           data.response.fighters
             .slice(
               (page - 1) * amountOfFightersPerPage,

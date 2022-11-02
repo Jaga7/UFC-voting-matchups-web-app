@@ -31,9 +31,9 @@ const getMatchups = async (req, res) => {
 
 const toggleVoteForMatchup = async (req, res) => {
   const { id: matchupId } = req.params;
-  const { voterId, hasUserAlreadyVotedForThatMatchup } = req.body;
+  const { voterId } = req.body;
 
-  if (!voterId || hasUserAlreadyVotedForThatMatchup == null) {
+  if (!voterId) {
     throw new BadRequestError("Please Provide All Values");
   }
 
@@ -43,9 +43,12 @@ const toggleVoteForMatchup = async (req, res) => {
     throw new NotFoundError(`No matchup with id ${matchupId}`);
   }
 
+  // check if voter already voted for this matchup
+  const hasUserVotedForThisMatchup = matchup.ids_of_voters.includes(voterId);
+
   const updatedMatchup = await Matchup.findOneAndUpdate(
     { _id: matchupId },
-    hasUserAlreadyVotedForThatMatchup
+    hasUserVotedForThisMatchup
       ? { $pull: { ids_of_voters: voterId }, $inc: { votersAmount: -1 } }
       : { $push: { ids_of_voters: voterId }, $inc: { votersAmount: 1 } },
     {

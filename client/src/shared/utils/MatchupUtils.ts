@@ -43,7 +43,12 @@ export const voteForMatchup = async ({
         matchupId: fetchedMatchup._id,
         voterId,
         hasUserAlreadyVotedForThatMatchup,
+        weightclass,
       });
+      const toastMessage = hasUserAlreadyVotedForThatMatchup
+        ? "You unvoted for a matchup"
+        : "You voted for a matchup";
+      toast.info(toastMessage);
     }
   } catch (e: any) {
     console.log(e);

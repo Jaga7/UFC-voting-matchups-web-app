@@ -20,4 +20,5 @@ export type VoteForMatchupT = {
   matchupId: string;
   voterId: string;
   hasUserAlreadyVotedForThatMatchup: boolean;
+  weightclass: WeightclassEnumT;
 };

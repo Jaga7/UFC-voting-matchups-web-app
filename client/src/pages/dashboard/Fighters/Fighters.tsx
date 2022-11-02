@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useGetFightersQuery } from "../../../services/fighters-service";
 import { useGetMatchupsQuery } from "../../../services/matchups-service";
 
@@ -25,14 +25,13 @@ const FightersPage = () => {
     window.scrollTo(0, 0);
   };
 
-  const navigate = useNavigate();
   const { weightclass } = useParams();
 
   const queryWeightclass =
     WeightclassEnumT[weightclass as keyof typeof WeightclassEnumT] || "all";
 
   const amountOfFightersPerPage = 10;
-  const { data, refetch } = useGetFightersQuery({
+  const { data } = useGetFightersQuery({
     weightclass: queryWeightclass,
     // page: page,
     amount: amountOfFightersPerPage,
@@ -46,7 +45,6 @@ const FightersPage = () => {
   return (
     <>
       <Header subheader={false} title='Fighters' />
-      {/* <FighterMenu /> */}
       <FighterSplitButton />
       <Box
         display={"grid"}
@@ -54,9 +52,9 @@ const FightersPage = () => {
         width='90%'
         columnGap='3em'
         rowGap='1.5em'
-        // onClick={handleClick}
       >
-        {data && data.response && matchups ? (
+        {/* {data && data.response && matchups ? ( */}
+        {data && data.response ? (
           data.response.fighters
             .slice(
               (page - 1) * amountOfFightersPerPage,
@@ -70,7 +68,7 @@ const FightersPage = () => {
                   (fighter) => fighter._id !== el._id
                 )}
                 matchupsOfFighter={
-                  matchups.length
+                  matchups
                     ? matchups.filter((matchup) =>
                         matchup.matched_fighters.some(
                           (fighterId) => fighterId === el._id
@@ -78,6 +76,7 @@ const FightersPage = () => {
                       )
                     : []
                 }
+                areMatchupsFetching={areMatchupsFetching}
               ></FighterCard>
             ))
         ) : (

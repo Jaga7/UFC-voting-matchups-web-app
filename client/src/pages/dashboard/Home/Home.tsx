@@ -50,7 +50,10 @@ const Home = () => {
         {topMatchupsWithFighters &&
           topMatchupsWithFighters.map((matchupWithFighters) => {
             return (
-              <TopRatedMatchupCard matchupWithFighters={matchupWithFighters} />
+              <TopRatedMatchupCard
+                key={matchupWithFighters._id}
+                matchupWithFighters={matchupWithFighters}
+              />
             );
           })}
       </Box>

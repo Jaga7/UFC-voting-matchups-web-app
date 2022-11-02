@@ -24,9 +24,12 @@ export const matchupsAPI = createApi({
           getTopVoted: options?.getTopVoted,
         },
       }),
-
-      providesTags: ["Matchups"],
+      providesTags: (result = [], error, arg) => [
+        ...result.map(({ _id }) => ({ type: "Matchups" as const, id: _id })),
+        "Matchups",
+      ],
     }),
+
     addMatchup: build.mutation<MatchupT, MatchupCreatingT>({
       query: (matchup) => {
         return {
@@ -36,6 +39,32 @@ export const matchupsAPI = createApi({
         };
       },
       invalidatesTags: ["Matchups"],
+      async onQueryStarted(
+        { weightclass, ...newMatchup },
+        { dispatch, queryFulfilled }
+      ) {
+        const postResult = dispatch(
+          matchupsAPI.util.updateQueryData(
+            "getMatchups",
+            { weightclass },
+            (draft: MatchupT[]) => {
+              const tempId = Math.random().toString(36).substring(7);
+              draft.push({
+                matched_fighters: [...newMatchup.fightersIds],
+                ids_of_voters: [newMatchup.voterId],
+                votersAmount: 1,
+                weightclass: weightclass,
+                _id: tempId,
+              });
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          postResult.undo();
+        }
+      },
     }),
     patchMatchup: build.mutation<MatchupT, VoteForMatchupT>({
       query: (options) => ({
@@ -45,7 +74,43 @@ export const matchupsAPI = createApi({
           ...options,
         },
       }),
-      invalidatesTags: ["Matchups"],
+
+      invalidatesTags: (result, error, arg) => [
+        { type: "Matchups", id: arg.matchupId },
+      ],
+      async onQueryStarted(
+        { weightclass, ...patch },
+        { dispatch, queryFulfilled }
+      ) {
+        const patchResult = dispatch(
+          matchupsAPI.util.updateQueryData(
+            "getMatchups",
+            { weightclass },
+            (draft: MatchupT[]) => {
+              const indexOfTheMatchupBeingUpdated = draft.findIndex(
+                (matchup: MatchupT) => matchup._id === patch.matchupId
+              );
+              draft[indexOfTheMatchupBeingUpdated].ids_of_voters =
+                patch.hasUserAlreadyVotedForThatMatchup
+                  ? draft[indexOfTheMatchupBeingUpdated].ids_of_voters.filter(
+                      (id) => id !== patch.voterId
+                    )
+                  : [
+                      ...draft[indexOfTheMatchupBeingUpdated].ids_of_voters,
+                      patch.voterId,
+                    ];
+
+              draft[indexOfTheMatchupBeingUpdated].votersAmount +=
+                patch.hasUserAlreadyVotedForThatMatchup ? -1 : 1;
+            }
+          )
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
   }),
 });

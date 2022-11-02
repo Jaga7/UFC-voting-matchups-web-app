@@ -5,7 +5,6 @@ import {
   CardHeader,
   CardContent,
   Typography,
-  Avatar,
   Box,
   Button,
 } from "@mui/material";
@@ -20,15 +19,18 @@ import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
 import { AuthState } from "../../types/AuthT";
 import { MatchupT } from "../../types/MatchupT";
 import { voteForMatchup } from "../../shared/utils/MatchupUtils";
+import { useEffect, useState } from "react";
 
 const FighterCard = ({
   fighter,
   opponents,
   matchupsOfFighter,
+  areMatchupsFetching,
 }: {
   fighter: FighterT;
   opponents: FighterT[];
-  matchupsOfFighter: MatchupT[];
+  matchupsOfFighter: MatchupT[] | [];
+  areMatchupsFetching: boolean;
 }) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
@@ -37,6 +39,15 @@ const FighterCard = ({
 
   const [patchMatchup] = usePatchMatchupMutation();
   const [addMatchup] = useAddMatchupMutation();
+
+  // state variable to store disable state of vote buttons
+  const [areVoteButtonsDisabled, setAreVoteButtonsDisabled] = useState(false);
+
+  useEffect(() => {
+    if (!areMatchupsFetching) {
+      setAreVoteButtonsDisabled(false);
+    }
+  }, [areMatchupsFetching]);
 
   return (
     <>
@@ -50,30 +61,23 @@ const FighterCard = ({
           flexWrap='wrap'
           alignItems='center'
         >
-          {/* <Avatar
-            src={fighter.avatarUrl}
-            sx={{
-              width: '48px',
-              height: '48px',
-              backgroundColor: theme.palette.background.paper,
-              marginLeft: '0.5em',
-            }}
-          /> */}
-          <CardHeader
-            title={fighter.fullname}
-            // subheader={<Typography>{fighter.rank}</Typography>}
-          />
+          <CardHeader title={fighter.fullname} />
         </Box>
         <CardContent>
           <Box
             onClick={(e) => {
               const clickedButton = e.target as HTMLButtonElement;
+
+              if (areVoteButtonsDisabled) {
+                // e.stopPropagation();
+                return;
+              }
+
               const nameOfChosenOpponent =
                 clickedButton.firstChild?.textContent;
               const idOfChosenOpponent = opponents.find(
                 (opponent) => opponent.fullname === nameOfChosenOpponent
               )!._id;
-
               voteForMatchup({
                 idOfChosenOpponent,
                 fighterId: fighter._id,
@@ -107,6 +111,14 @@ const FighterCard = ({
                     color={
                       didCurrentUserVoteForThisMatchup ? "success" : "primary"
                     }
+                    disabled={areVoteButtonsDisabled}
+                    onClick={(e) => {
+                      setAreVoteButtonsDisabled(true);
+                      if (areVoteButtonsDisabled) {
+                        e.stopPropagation();
+                        return;
+                      }
+                    }}
                   >
                     {opponent.fullname}
                   </Button>

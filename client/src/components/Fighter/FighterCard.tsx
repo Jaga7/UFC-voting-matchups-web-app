@@ -69,7 +69,6 @@ const FighterCard = ({
               const clickedButton = e.target as HTMLButtonElement;
 
               if (areVoteButtonsDisabled) {
-                // e.stopPropagation();
                 return;
               }
 
@@ -94,7 +93,7 @@ const FighterCard = ({
             gap='1em'
             justifyContent='space-between'
           >
-            <Typography variant='body2' color='text.secondary'>
+            <Typography variant='h6' color={theme.palette.text.primary}>
               Opponents:
             </Typography>
             {opponents.map((opponent) => {

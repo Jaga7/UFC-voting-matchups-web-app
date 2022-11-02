@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetFightersQuery } from "../../../services/fighters-service";
 import { useGetMatchupsQuery } from "../../../services/matchups-service";
@@ -34,7 +34,6 @@ const FightersPage = () => {
   const amountOfFightersPerPage = 10;
   const { data, isFetching: areUsersFetching } = useGetFightersQuery({
     weightclass: queryWeightclass,
-    // page: page,
     amount: amountOfFightersPerPage,
   });
 
@@ -54,7 +53,6 @@ const FightersPage = () => {
         columnGap='3em'
         rowGap='1.5em'
       >
-        {/* {data && data.response && matchups ? ( */}
         {!areUsersFetching && data && data.response ? (
           data.response.fighters
             .slice(

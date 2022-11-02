@@ -13,6 +13,8 @@ import {
   Grid,
   Paper,
   Container,
+  Typography,
+  Box,
 } from "@mui/material";
 import Header from "../../components/Header/Header";
 
@@ -108,20 +110,20 @@ function Auth() {
                 <Button type='submit' variant='contained'>
                   {isMember ? "LOGIN" : "REGISTER"}
                 </Button>
-                <p>
-                  {isMember ? "Not a member yet?" : "Already a member?"}
-                  <button
-                    type='button'
-                    onClick={() => setIsMember(!isMember)}
-                    className='member-btn'
-                  >
-                    {isMember ? "Register" : "Login"}
-                  </button>
-                </p>
               </ButtonGroup>
             </Grid>
             <Grid item mt={0.5}></Grid>
           </form>
+          <Typography textAlign='center'>
+            {isMember ? "Not a member yet? " : "Already a member? "}
+            <button
+              type='button'
+              onClick={() => setIsMember(!isMember)}
+              className='member-btn'
+            >
+              {isMember ? "Register" : "Login"}
+            </button>
+          </Typography>
         </Paper>
       </Grid>
     </Container>

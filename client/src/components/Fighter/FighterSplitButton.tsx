@@ -25,6 +25,12 @@ const options = [
   "womenBantamweight",
 ];
 
+const optionsForText = options.map((option) => {
+  // make first letter uppercase
+  option = option.charAt(0).toUpperCase() + option.slice(1);
+  return option.split(/(?=[A-Z])/).join(" ");
+});
+
 export default function SplitButton({
   setPage,
 }: {
@@ -72,7 +78,7 @@ export default function SplitButton({
         aria-label='split button'
         sx={{ marginBottom: "1.5em" }}
       >
-        <Button onClick={handleClick}>{options[selectedIndex]}</Button>
+        <Button onClick={handleClick}>{optionsForText[selectedIndex]}</Button>
         <Button
           size='small'
           aria-controls={open ? "split-button-menu" : undefined}
@@ -130,7 +136,7 @@ export default function SplitButton({
                   >
                     <Grid item xs={6}>
                       {/* <Item>1</Item> */}
-                      {options.slice(0, 8).map((option, index) => (
+                      {optionsForText.slice(0, 8).map((option, index) => (
                         <MenuItem
                           key={option}
                           selected={index === selectedIndex}
@@ -142,7 +148,7 @@ export default function SplitButton({
                     </Grid>
                     <Grid item xs={6}>
                       {/* <Item>1</Item> */}
-                      {options.slice(8).map((option, index) => (
+                      {optionsForText.slice(8).map((option, index) => (
                         <MenuItem
                           key={option}
                           selected={index + 8 === selectedIndex}

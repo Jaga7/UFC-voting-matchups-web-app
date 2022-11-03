@@ -20,19 +20,6 @@ const getFighters = async (req, res) => {
   // NO AWAIT
   let result = Fighter.find(queryObject);
 
-  //   if (sort === "highest ranked") {
-  //     result = result.sort("-rank");
-  //   }
-  //   if (sort === "lowest ranked") {
-  //     result = result.sort("rank");
-  //   }
-  if (sort === "a-z") {
-    result = result.sort("fullname");
-  }
-  if (sort === "z-a") {
-    result = result.sort("-fullname");
-  }
-
   const fighters = await result;
 
   const totalFighters = await Fighter.countDocuments(queryObject);

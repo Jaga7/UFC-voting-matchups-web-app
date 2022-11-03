@@ -115,9 +115,9 @@ const scrapeFightersWhoHaveAMatchup = async (url, page) => {
       await page.evaluate((_) => {
         window.scrollBy(0, 1.5 * window.innerHeight);
       });
-      await page.screenshot({
-        path: `buddy${numberOfSection}${j}-screenshot.png`,
-      });
+      // await page.screenshot({
+      //   path: `buddy${numberOfSection}${j}-screenshot.png`,
+      // });
       await page.$eval(
         `#events-list-upcoming > div > div > div.l-container > div > div > section:nth-child(${numberOfSection}) > ul > li:nth-child(${j}) > article > div.c-card-event--result__info > h3 > a`,
         (elem) => {

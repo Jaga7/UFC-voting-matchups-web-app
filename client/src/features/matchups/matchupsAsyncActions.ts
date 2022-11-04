@@ -1,11 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 
-import { MatchupT } from "../../types/MatchupT";
-
-import { RegisterOrLoginResponseT } from "../../types/AuthT";
 import { RootState } from "../../app/store";
-import { WeightclassEnumT } from "../../types/WeightClassEnumT";
 
 export const getAMatchup = createAsyncThunk(
   "matchups/getMatchup",

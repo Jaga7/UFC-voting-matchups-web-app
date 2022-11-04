@@ -11,23 +11,14 @@ import MenuList from "@mui/material/MenuList";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 
-const options = [
-  "Flyweight",
-  "Bantamweight",
-  "Featherweight",
-  "Lightweight",
-  "Welterweight",
-  "Middleweight",
-  "LightHeavyweight",
-  "Heavyweight",
-  "womenStrawweight",
-  "womenFlyweight",
-  "womenBantamweight",
-];
+import { WeightclassEnumT } from "../../types/WeightClassEnumT";
 
-const optionsForText = options.map((option) => {
+const weightclassNames = Object.values(WeightclassEnumT);
+
+const weightclassNamesForText = weightclassNames.map((option) => {
   // make first letter uppercase
-  option = option.charAt(0).toUpperCase() + option.slice(1);
+  option = (option.charAt(0).toUpperCase() +
+    option.slice(1)) as WeightclassEnumT;
   return option.split(/(?=[A-Z])/).join(" ");
 });
 
@@ -42,7 +33,7 @@ export default function SplitButton({
   const [selectedIndex, setSelectedIndex] = useState(1);
 
   const handleClick = () => {
-    navigate(`/fighters/${options[selectedIndex]}`);
+    navigate(`/fighters/${weightclassNames[selectedIndex]}`);
   };
 
   const handleMenuItemClick = (
@@ -52,7 +43,7 @@ export default function SplitButton({
     setPage(1);
     setSelectedIndex(index);
     setOpen(false);
-    navigate(`/fighters/${options[index]}`);
+    navigate(`/fighters/${weightclassNames[index]}`);
   };
 
   const handleToggle = () => {
@@ -78,7 +69,9 @@ export default function SplitButton({
         aria-label='split button'
         sx={{ marginBottom: "1.5em" }}
       >
-        <Button onClick={handleClick}>{optionsForText[selectedIndex]}</Button>
+        <Button onClick={handleClick}>
+          {weightclassNamesForText[selectedIndex]}
+        </Button>
         <Button
           size='small'
           aria-controls={open ? "split-button-menu" : undefined}
@@ -136,19 +129,23 @@ export default function SplitButton({
                   >
                     <Grid item xs={6}>
                       {/* <Item>1</Item> */}
-                      {optionsForText.slice(0, 8).map((option, index) => (
-                        <MenuItem
-                          key={option}
-                          selected={index === selectedIndex}
-                          onClick={(event) => handleMenuItemClick(event, index)}
-                        >
-                          {option}
-                        </MenuItem>
-                      ))}
+                      {weightclassNamesForText
+                        .slice(0, 8)
+                        .map((option, index) => (
+                          <MenuItem
+                            key={option}
+                            selected={index === selectedIndex}
+                            onClick={(event) =>
+                              handleMenuItemClick(event, index)
+                            }
+                          >
+                            {option}
+                          </MenuItem>
+                        ))}
                     </Grid>
                     <Grid item xs={6}>
                       {/* <Item>1</Item> */}
-                      {optionsForText.slice(8).map((option, index) => (
+                      {weightclassNamesForText.slice(8).map((option, index) => (
                         <MenuItem
                           key={option}
                           selected={index + 8 === selectedIndex}

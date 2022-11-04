@@ -1,5 +1,4 @@
 import { closeCookiesModal } from "./utils.js";
-import { WEIGHT_CLASSES_NAMES } from "./constants.js";
 
 const scrapeFightersWhoHaveAMatchup = async (url, page) => {
   const scrapedFightersWithAMatchup = {};

@@ -1,6 +1,5 @@
 import Matchup from "../models/Matchup.js";
 import { StatusCodes } from "http-status-codes";
-// import checkPermissions from "../utils/checkPermissions.js";
 import { BadRequestError, NotFoundError } from "../errors/index.js";
 
 const getMatchups = async (req, res) => {

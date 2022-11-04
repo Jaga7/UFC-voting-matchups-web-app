@@ -1,6 +1,5 @@
 import Fighter from "../models/Fighter.js";
 import { StatusCodes } from "http-status-codes";
-// import checkPermissions from "../utils/checkPermissions.js";
 
 const getFighters = async (req, res) => {
   const { search, weightclass, sort, id } = req.query;

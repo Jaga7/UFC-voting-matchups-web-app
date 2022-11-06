@@ -3,5 +3,3 @@ export type UserT = {
   username: string;
   options?: { colorTheme: string };
 };
-
-export type UserNewT = Omit<UserT, "id">;

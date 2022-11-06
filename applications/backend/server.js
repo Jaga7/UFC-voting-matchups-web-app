@@ -21,6 +21,7 @@ import connectDB from "./db/connect.js";
 import authRouter from "./routes/authRoutes.js";
 import fightersRouter from "./routes/fightersRoutes.js";
 import matchupsRouter from "./routes/matchupsRoutes.js";
+import usersRouter from "./routes/usersRoutes.js";
 
 // middleware
 import notFoundMiddleware from "./middleware/not-found.js";
@@ -46,6 +47,8 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/fighters", authenticateUser, fightersRouter);
 
 app.use("/api/v1/matchups", authenticateUser, matchupsRouter);
+
+app.use("/api/v1/users", authenticateUser, usersRouter);
 
 // app.get('*', function (request, response) {
 //   response.sendFile(path.resolve(__dirname, './client/build', 'index.html'))

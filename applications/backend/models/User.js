@@ -17,6 +17,12 @@ const UserSchema = new mongoose.Schema({
     minlength: 4,
     select: false,
   },
+  options: {
+    type: Object,
+    default: {
+      colorTheme: "light",
+    },
+  },
 });
 
 UserSchema.pre("save", async function () {

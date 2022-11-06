@@ -27,7 +27,7 @@ async function scrapeFighters() {
   return { allRankedFighters, fightersWhoHaveAMatchup };
 }
 
-const scrapeAndSaveToDatabase = async () => {
+export const scrapeAndSaveToDatabase = async () => {
   const { allRankedFighters, fightersWhoHaveAMatchup } = await scrapeFighters();
   await start();
   const fightersWithoutAMatchup =

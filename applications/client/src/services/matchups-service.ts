@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../app/store";
 import { MatchupCreatingT, MatchupT, VoteForMatchupT } from "../types/MatchupT";
 import { MatchupQueryT } from "../types/MatchupQueryT";
+import baseUrl from "../shared/baseUrl";
 
 export const matchupsAPI = createApi({
   reducerPath: "matchupPath",
@@ -16,7 +17,7 @@ export const matchupsAPI = createApi({
   endpoints: (build) => ({
     getMatchups: build.query<MatchupT[], MatchupQueryT>({
       query: (options) => ({
-        url: "/api/v1/matchups",
+        url: `${baseUrl}/api/v1/matchups`,
         params: {
           weightclass: options?.weightclass,
           oneFighterId: options?.oneFighterId,
@@ -33,7 +34,7 @@ export const matchupsAPI = createApi({
     addMatchup: build.mutation<MatchupT, MatchupCreatingT>({
       query: (matchup) => {
         return {
-          url: "/api/v1/matchups",
+          url: `${baseUrl}/api/v1/matchups`,
           method: "POST",
           body: matchup,
         };
@@ -68,7 +69,7 @@ export const matchupsAPI = createApi({
     }),
     patchMatchup: build.mutation<MatchupT, VoteForMatchupT>({
       query: (options) => ({
-        url: `/api/v1/matchups/${options.matchupId}`,
+        url: `${baseUrl}/api/v1/matchups/${options.matchupId}`,
         method: "PATCH",
         body: {
           ...options,

@@ -8,7 +8,7 @@ function useAuthStatus() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    if (!token) {
+    if (!token || !authState.currentUser) {
       navigate("/auth");
     }
   }, [navigate, authState.currentUser, token]);

@@ -40,7 +40,7 @@ export const scrapeAndSaveToDatabase = async () => {
 
 const start = async () => {
   try {
-    await connectDB(process.env.MONGO_URL);
+    await connectDB(process.env.MONGO_URL_TEST);
     console.log("MongoDB connected");
   } catch (error) {
     console.log(error);

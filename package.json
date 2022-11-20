@@ -3,19 +3,18 @@
   "private": true,
   "scripts": {
     "start": "concurrently --kill-others-on-fail \"npm run start:server\" \"npm run start:client\"",
-    "start:client": "cd applications && cd backend && npm run start",
-    "start:server": "cd applications && cd client && npm run start",
-    "scrape": "cd applications && cd backend && cd scraping && node scraping.js"
+    "start:client": "cd applications && cd client && npm run start",
+    "start:server": "cd applications && cd backend && npm run start",
+    "scrape": "cd applications && cd backend && cd scraping && node scraping.js",
+    "cypress:open": "cypress open"
   },
   "workspaces": [
     "applications/*"
   ],
   "devDependencies": {
     "concurrently": "^7.1.0",
+    "cypress": "^11.1.0",
     "lerna": "^6.0.1"
-  },
-  "dependencies": {
-    "@netlify/functions": "^1.3.0"
   },
   "type": "module"
 }

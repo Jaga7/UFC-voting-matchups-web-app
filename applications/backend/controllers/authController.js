@@ -70,4 +70,16 @@ const updateUser = async (req, res) => {
   });
 };
 
-export { register, login, updateUser };
+const deleteUser = async (req, res) => {
+  const { userID } = req.user;
+
+  await User.delete({ _id: userID });
+
+  await Matchup.updateMany({
+    vote: { $in: toBeDeletedFightersObjectIds },
+  });
+
+  res.status(StatusCodes.OK);
+};
+
+export { register, login, updateUser, deleteUser };

@@ -90,6 +90,7 @@ function Auth() {
                 variant='filled'
                 type='text'
                 label='username'
+                name='username'
               />
             </Grid>
             <TextField
@@ -99,6 +100,7 @@ function Auth() {
               onChange={onPasswordChange}
               variant='filled'
               label='password'
+              name='password'
               type={showPassword ? "text" : "password"}
             />
             <Grid item mt={1}>

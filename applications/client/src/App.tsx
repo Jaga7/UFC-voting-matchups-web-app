@@ -9,6 +9,7 @@ import { ThemeProvider } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import FightersPage from "./pages/dashboard/Fighters/Fighters";
+import ProtectedRoute from "./pages/ProtectedRoute";
 
 function App() {
   const theme = useColorTheme();
@@ -16,7 +17,14 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Routes>
-        <Route path='/' element={<SharedLayout />}>
+        <Route
+          path='/'
+          element={
+            <ProtectedRoute>
+              <SharedLayout />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<Home />} />
           <Route path='fighters/:weightclass' element={<FightersPage />} />
 

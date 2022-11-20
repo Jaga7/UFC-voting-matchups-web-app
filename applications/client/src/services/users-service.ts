@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { RootState } from "../app/store";
+import baseUrl from "../shared/baseUrl";
 import { UserT } from "../types/UserT";
 
 export const usersAPI = createApi({
@@ -16,7 +17,7 @@ export const usersAPI = createApi({
   endpoints: (build) => ({
     patchUser: build.mutation<UserT, { id: string; [key: string]: any }>({
       query: (options) => ({
-        url: `/api/v1/users/${options.id}`,
+        url: `${baseUrl}/api/v1/users/${options.id}`,
         method: "PATCH",
         body: {
           ...options,

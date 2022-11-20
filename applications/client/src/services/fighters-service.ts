@@ -5,6 +5,7 @@ import { EntityPage } from "../types/EntityPage";
 import { FighterQueryT } from "../types/FighterQueryT";
 import { FighterQueryResponseT } from "../types/FighterQueryResponseT";
 import { FighterT } from "../types/FighterT";
+import baseUrl from "../shared/baseUrl";
 
 export const fightersAPI = createApi({
   reducerPath: "fighterPath",
@@ -22,7 +23,7 @@ export const fightersAPI = createApi({
       (EntityPage & FighterQueryT) | void
     >({
       query: (options) => ({
-        url: "/api/v1/fighters",
+        url: `${baseUrl}/api/v1/fighters`,
         params: {
           _limit: options?.amount,
           weightclass: options?.weightclass,
@@ -38,7 +39,7 @@ export const fightersAPI = createApi({
     }),
     getFightersByIds: build.query<{ response: FighterT[] }, string[]>({
       query: (ids) => ({
-        url: `/api/v1/fighters?${ids.reduce(
+        url: `${baseUrl}/api/v1/fighters?${ids.reduce(
           (acc, curr) => (acc += `id=${curr}&`),
           ""
         )}`,

@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 
 import { RootState } from "../../app/store";
+import baseUrl from "../../shared/baseUrl";
 
 export const getAMatchup = createAsyncThunk(
   "matchups/getMatchup",
@@ -15,7 +16,7 @@ export const getAMatchup = createAsyncThunk(
     };
     try {
       const response = await axios.get(
-        `/api/v1/matchups?oneFighterId=${fightersIds.oneFighterId}&otherFighterId=${fightersIds.otherFighterId}`,
+        `${baseUrl}/api/v1/matchups?oneFighterId=${fightersIds.oneFighterId}&otherFighterId=${fightersIds.otherFighterId}`,
         { headers: authHeader }
       );
       if (response.data === null) {

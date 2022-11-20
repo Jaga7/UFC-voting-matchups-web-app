@@ -1,11 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+
 import { RootState } from "../app/store";
 import { MatchupCreatingT, MatchupT, VoteForMatchupT } from "../types/MatchupT";
 import { MatchupQueryT } from "../types/MatchupQueryT";
+import baseUrl from "../shared/baseUrl";
 
 export const matchupsAPI = createApi({
   reducerPath: "matchupPath",
   baseQuery: fetchBaseQuery({
+    baseUrl,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).authReducer.token;
       headers.set("Authorization", `Bearer ${token}`);

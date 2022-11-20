@@ -1,14 +1,16 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { RootState } from "../app/store";
 
+import { RootState } from "../app/store";
 import { EntityPage } from "../types/EntityPage";
 import { FighterQueryT } from "../types/FighterQueryT";
 import { FighterQueryResponseT } from "../types/FighterQueryResponseT";
 import { FighterT } from "../types/FighterT";
+import baseUrl from "../shared/baseUrl";
 
 export const fightersAPI = createApi({
   reducerPath: "fighterPath",
   baseQuery: fetchBaseQuery({
+    baseUrl,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).authReducer.token;
       headers.set("Authorization", `Bearer ${token}`);

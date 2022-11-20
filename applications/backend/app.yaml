@@ -1,0 +1,6 @@
+runtime: nodejs14
+
+env_variables:
+  MONGO_URL: "mongodb+srv://my-first-user:v8Hfc608qBPQRPwB@cluster0.pgxrb.mongodb.net/04-UFC-APP?retryWrites=true&w=majority"
+  JWT_SECRET: "815C1A211CBCF4C2BA5EBE18691BD"
+  JWT_LIFETIME: 1d

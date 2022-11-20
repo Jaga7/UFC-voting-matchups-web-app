@@ -13,7 +13,7 @@ const URL_UFC_UPCOMING_EVENTS =
   "https://www.ufc.com/events#events-list-upcoming";
 
 async function scrapeFighters() {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
   const page = await browser.newPage();
 
   const allRankedFighters = await scrapeAllFighters(URL_UFC_RANKINGS, page);
@@ -27,7 +27,7 @@ async function scrapeFighters() {
   return { allRankedFighters, fightersWhoHaveAMatchup };
 }
 
-const scrapeAndSaveToDatabase = async () => {
+export const scrapeAndSaveToDatabase = async () => {
   const { allRankedFighters, fightersWhoHaveAMatchup } = await scrapeFighters();
   await start();
   const fightersWithoutAMatchup =

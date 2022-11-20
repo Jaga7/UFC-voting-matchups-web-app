@@ -5,13 +5,18 @@
     "start": "concurrently --kill-others-on-fail \"npm run start:server\" \"npm run start:client\"",
     "start:client": "cd applications && cd backend && npm run start",
     "start:server": "cd applications && cd client && npm run start",
-    "scrape": "cd applications && cd backend && cd scraping && node scraping.js"
+    "scrape": "cd applications && cd backend && cd scraping && node scraping.js",
+    "setup-production": "npm run install-client && npm run install-server && npm run build-client",
+    "install-client": "cd applications && cd client && npm install",
+    "install-server": "cd applications && cd backend && npm install",
+    "build-client": "cd applications && cd client && npm run build"
   },
   "workspaces": [
     "applications/*"
   ],
   "devDependencies": {
-    "lerna": "^6.0.1",
-    "concurrently": "^7.1.0"
-  }
+    "concurrently": "^7.1.0",
+    "lerna": "^6.0.1"
+  },
+  "type": "module"
 }

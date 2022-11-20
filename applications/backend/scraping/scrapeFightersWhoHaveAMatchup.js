@@ -239,9 +239,34 @@ const scrapeInfoFromASingleFight = async (
   console.log("halo", nameOfOneFighter);
   console.log("halo", nameOfOtherFighter);
   console.log("halo", weightClassOfTheFight);
+
+  let nameOfOneFighterFormatted =
+    nameOfOneFighter &&
+    nameOfOneFighter
+      .split(" ")
+      .map(
+        (nameOrSurname) =>
+          nameOrSurname.charAt(0).toUpperCase() +
+          nameOrSurname.slice(1).toLowerCase()
+      )
+      .join(" ");
+  let nameOfOtherFighterFormatted =
+    nameOfOtherFighter &&
+    nameOfOtherFighter
+      .split(" ")
+      .map(
+        (nameOrSurname) =>
+          nameOrSurname.charAt(0).toUpperCase() +
+          nameOrSurname.slice(1).toLowerCase()
+      )
+      .join(" ");
+  console.log("halo2", nameOfOneFighterFormatted);
+  console.log("halo2", nameOfOtherFighterFormatted);
+  console.log("halo2", weightClassOfTheFight);
+
   const namesOfFighters = [
-    nameOfOneFighter,
-    nameOfOtherFighter,
+    nameOfOneFighterFormatted,
+    nameOfOtherFighterFormatted,
     // weightClassOfTheFight,
   ].filter((el) => el);
 

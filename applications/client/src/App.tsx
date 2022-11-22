@@ -8,7 +8,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import FightersPage from "./pages/dashboard/Fighters/Fighters";
+import VotingPage from "./pages/dashboard/Voting/VotingPage";
 import ProtectedRoute from "./pages/ProtectedRoute";
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
           }
         >
           <Route index element={<Home />} />
-          <Route path='fighters/:weightclass' element={<FightersPage />} />
+          <Route path='voting/:weightclass' element={<VotingPage />} />
 
           <Route path='logout' element={<Logout />} />
         </Route>

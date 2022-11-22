@@ -13,7 +13,7 @@ import FighterCardSkeleton from "../../../components/Fighter/FighterCardSkeleton
 import { FighterT } from "../../../types/FighterT";
 import { WeightclassEnumT } from "../../../types/WeightClassEnumT";
 
-const FightersPage = () => {
+const VotingPage = () => {
   const matches = useMediaQuery("(min-width:960px)");
 
   const [page, setPage] = useState(1);
@@ -44,7 +44,7 @@ const FightersPage = () => {
 
   return (
     <>
-      <Header subheader={false} title='Fighters' />
+      <Header subheader={false} title='Voting' />
       <FighterSplitButton setPage={setPage} />
       <Box
         display={"grid"}
@@ -108,4 +108,4 @@ const FightersPage = () => {
     </>
   );
 };
-export default FightersPage;
+export default VotingPage;

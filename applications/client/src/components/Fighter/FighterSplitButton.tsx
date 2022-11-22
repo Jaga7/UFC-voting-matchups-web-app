@@ -33,7 +33,7 @@ export default function SplitButton({
   const [selectedIndex, setSelectedIndex] = useState(1);
 
   const handleClick = () => {
-    navigate(`/fighters/${weightclassNames[selectedIndex]}`);
+    navigate(`/voting/${weightclassNames[selectedIndex]}`);
   };
 
   const handleMenuItemClick = (
@@ -43,7 +43,7 @@ export default function SplitButton({
     setPage(1);
     setSelectedIndex(index);
     setOpen(false);
-    navigate(`/fighters/${weightclassNames[index]}`);
+    navigate(`/voting/${weightclassNames[index]}`);
   };
 
   const handleToggle = () => {

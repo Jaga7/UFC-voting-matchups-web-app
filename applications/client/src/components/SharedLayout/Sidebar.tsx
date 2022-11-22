@@ -92,7 +92,7 @@ const Sidebar = () => {
           <MenuButton text={"Home"} url='/'>
             <Home color='secondary' />
           </MenuButton>
-          <MenuButton text={"Vote"} url='/fighters/Bantamweight'>
+          <MenuButton text={"Vote"} url='/voting/Bantamweight'>
             <SportsKabaddi color='secondary' />
           </MenuButton>
 

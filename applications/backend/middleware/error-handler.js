@@ -15,6 +15,11 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     defaultError.statusCode = StatusCodes.BAD_REQUEST;
     defaultError.msg = `${Object.keys(err.keyValue)} field has to be unique`;
   }
+
+  if (err.message == "Invalid Credentials") {
+    defaultError.statusCode = StatusCodes.UNAUTHORIZED;
+    defaultError.msg = "Invalid Credentials";
+  }
   res.status(defaultError.statusCode).json({ msg: defaultError.msg });
 };
 

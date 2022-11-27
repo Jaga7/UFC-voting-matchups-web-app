@@ -12,14 +12,15 @@ export const loginUser = createAsyncThunk(
     try {
       const response: AxiosResponse<RegisterOrLoginResponseT> | undefined =
         await axios.post(`${baseUrl}/api/v1/auth/login`, loginData);
+      console.log("response", response);
       if (!response?.data) {
         throw new Error("Incorrect username or password");
       } else {
         return response.data;
       }
     } catch (e) {
-      if (e instanceof Error || e instanceof AxiosError) {
-        return thunkAPI.rejectWithValue(e.message);
+      if (e instanceof AxiosError) {
+        return thunkAPI.rejectWithValue(e.response?.data.msg);
       } else {
         return thunkAPI.rejectWithValue("Unknown error");
       }

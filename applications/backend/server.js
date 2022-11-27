@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
-// import "express-async-errors";
+import "express-async-errors";
 // import morgan from "morgan";
 
 // import { dirname } from "path";

@@ -1,57 +1,51 @@
 import { toast } from "react-toastify";
-import { getAMatchup } from "../../features/matchups/matchupsAsyncActions";
 import { WeightclassEnumT } from "../../types/WeightClassEnumT";
+import { MatchupT } from "../../types/MatchupT";
 
 export const voteForMatchup = async ({
+  matchupsOfFighter,
   idOfChosenOpponent,
   fighterId,
   voterId,
   weightclass,
-  dispatch,
   patchMatchup,
   addMatchup,
 }: {
+  matchupsOfFighter: MatchupT[] | [];
   idOfChosenOpponent: string;
   fighterId: string;
   voterId: string;
   weightclass: WeightclassEnumT;
-  dispatch: any;
   patchMatchup: any;
   addMatchup: any;
 }) => {
-  try {
-    const fetchedMatchup = await dispatch(
-      getAMatchup({
-        oneFighterId: fighterId,
-        otherFighterId: idOfChosenOpponent,
-      })
-    ).unwrap();
+  const alreadyExistingMatchup = matchupsOfFighter.find(
+    (matchup) =>
+      matchup.matched_fighters.includes(fighterId) &&
+      matchup.matched_fighters.includes(idOfChosenOpponent)
+  );
 
-    if (fetchedMatchup == null) {
-      addMatchup({
-        fightersIds: [fighterId, idOfChosenOpponent],
-        voterId,
-        weightclass,
-      });
-      toast.info(`You voted for a matchup`);
-    } else {
-      const hasUserAlreadyVotedForThatMatchup = Boolean(
-        fetchedMatchup.ids_of_voters.find((id: string) => id === voterId)
-      );
+  if (alreadyExistingMatchup) {
+    const hasUserAlreadyVotedForThatMatchup = Boolean(
+      alreadyExistingMatchup.ids_of_voters.find((id: string) => id === voterId)
+    );
 
-      patchMatchup({
-        matchupId: fetchedMatchup._id,
-        voterId,
-        hasUserAlreadyVotedForThatMatchup,
-        weightclass,
-      });
-      const toastMessage = hasUserAlreadyVotedForThatMatchup
-        ? "You unvoted a matchup"
-        : "You voted for a matchup";
-      toast.info(toastMessage);
-    }
-  } catch (e: any) {
-    console.log(e);
-    toast.error(e.message);
+    patchMatchup({
+      matchupId: alreadyExistingMatchup._id,
+      voterId,
+      hasUserAlreadyVotedForThatMatchup,
+      weightclass,
+    });
+    const toastMessage = hasUserAlreadyVotedForThatMatchup
+      ? "You unvoted a matchup"
+      : "You voted for a matchup";
+    toast.info(toastMessage);
+  } else {
+    addMatchup({
+      fightersIds: [fighterId, idOfChosenOpponent],
+      voterId,
+      weightclass,
+    });
+    toast.info(`You voted for a matchup`);
   }
 };

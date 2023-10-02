@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { combineReducers } from "redux";
 import authReducer from "../features/auth/authSlice";
 import colorThemeReducer from "../features/colorTheme/colorThemeSlice";
-import matchupsReducer from "../features/matchups/matchupsSlice";
 import { ErrorCatcher } from "../services/middleware/error";
 import { CurriedGetDefaultMiddleware } from "@reduxjs/toolkit/dist/getDefaultMiddleware";
 import { authMiddleware } from "./middleware/authMiddleware";
@@ -12,7 +11,6 @@ import { matchupsAPI } from "../services/matchups-service";
 const rootReducer = combineReducers({
   authReducer,
   colorThemeReducer,
-  matchupsReducer,
   [fightersAPI.reducerPath]: fightersAPI.reducer,
   [matchupsAPI.reducerPath]: matchupsAPI.reducer,
 });

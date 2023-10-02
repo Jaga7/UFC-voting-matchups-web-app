@@ -78,11 +78,11 @@ const FighterCard = ({
                 (opponent) => opponent.fullname === nameOfChosenOpponent
               )!._id;
               voteForMatchup({
+                matchupsOfFighter,
                 idOfChosenOpponent,
                 fighterId: fighter._id,
                 voterId: authState.currentUser!._id,
                 weightclass: fighter.weightclass,
-                dispatch,
                 patchMatchup,
                 addMatchup,
               });

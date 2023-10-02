@@ -3,6 +3,13 @@ import { RootState } from "../app/store";
 import { MatchupCreatingT, MatchupT, VoteForMatchupT } from "../types/MatchupT";
 import { MatchupQueryT } from "../types/MatchupQueryT";
 import baseUrl from "../shared/baseUrl";
+import { WeightclassEnumT } from "../types/WeightClassEnumT";
+
+const tags = {
+  matchupsByWeightclass: (weightclass: WeightclassEnumT | "all") =>
+    `MatchupsByWeightclass:${weightclass}`,
+  matchupsByTopVoted: "MatchupsByTopVoted",
+};
 
 export const matchupsAPI = createApi({
   reducerPath: "matchupPath",
@@ -13,7 +20,12 @@ export const matchupsAPI = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Matchups"],
+  tagTypes: [
+    ...Object.values(WeightclassEnumT).map((weightclass) =>
+      tags.matchupsByWeightclass(weightclass)
+    ),
+    tags.matchupsByTopVoted,
+  ],
   endpoints: (build) => ({
     getMatchups: build.query<MatchupT[], MatchupQueryT>({
       query: (options) => ({
@@ -25,10 +37,15 @@ export const matchupsAPI = createApi({
           getTopVoted: options?.getTopVoted,
         },
       }),
-      providesTags: (result = [], error, arg) => [
-        ...result.map(({ _id }) => ({ type: "Matchups" as const, id: _id })),
-        "Matchups",
-      ],
+      providesTags: (result = [], error, arg) => {
+        const tagsArray = [
+          tags.matchupsByWeightclass(arg?.weightclass || "all"),
+        ];
+        if (arg?.getTopVoted) {
+          tagsArray.push(tags.matchupsByTopVoted);
+        }
+        return tagsArray;
+      },
     }),
 
     addMatchup: build.mutation<MatchupT, MatchupCreatingT>({
@@ -39,7 +56,10 @@ export const matchupsAPI = createApi({
           body: matchup,
         };
       },
-      invalidatesTags: ["Matchups"],
+      invalidatesTags: (result, error, arg) => [
+        tags.matchupsByWeightclass(arg?.weightclass || "all"),
+        tags.matchupsByTopVoted,
+      ],
       async onQueryStarted(
         { weightclass, ...newMatchup },
         { dispatch, queryFulfilled }
@@ -77,7 +97,8 @@ export const matchupsAPI = createApi({
       }),
 
       invalidatesTags: (result, error, arg) => [
-        { type: "Matchups", id: arg.matchupId },
+        tags.matchupsByWeightclass(arg?.weightclass || "all"),
+        tags.matchupsByTopVoted,
       ],
       async onQueryStarted(
         { weightclass, ...patch },

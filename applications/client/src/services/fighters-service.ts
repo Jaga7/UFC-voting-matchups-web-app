@@ -17,7 +17,6 @@ export const fightersAPI = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Fighters", "FightersFromTopMatchups"],
   endpoints: (build) => ({
     getFighters: build.query<
       { response: FighterQueryResponseT },
@@ -35,8 +34,6 @@ export const fightersAPI = createApi({
           response,
         };
       },
-
-      providesTags: ["Fighters"],
     }),
     getFightersByIds: build.query<{ response: FighterT[] }, string[]>({
       query: (ids) => ({
@@ -50,7 +47,6 @@ export const fightersAPI = createApi({
           response: response.fighters,
         };
       },
-      providesTags: ["FightersFromTopMatchups"],
     }),
   }),
 });

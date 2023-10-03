@@ -1,8 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-import { UserT } from "../../types/UserT";
-
 import { RegisterOrLoginResponseT } from "../../types/AuthT";
 import baseUrl from "../../shared/baseUrl";
 

@@ -15,7 +15,7 @@ import {
   usePatchMatchupMutation,
   useAddMatchupMutation,
 } from "../../services/matchups-service";
-import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
+import { useAppSelector } from "../../hooks/reduxHooks";
 import { AuthState } from "../../types/AuthT";
 import { MatchupT } from "../../types/MatchupT";
 import { voteForMatchup } from "../../shared/utils/MatchupUtils";
@@ -33,7 +33,6 @@ const FighterCard = ({
   areMatchupsFetching: boolean;
 }) => {
   const theme = useTheme();
-  const dispatch = useAppDispatch();
 
   const authState: AuthState = useAppSelector((state) => state.authReducer);
 

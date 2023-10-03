@@ -14,6 +14,7 @@ const tags = {
 export const matchupsAPI = createApi({
   reducerPath: "matchupPath",
   baseQuery: fetchBaseQuery({
+    baseUrl,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).authReducer.token;
       headers.set("Authorization", `Bearer ${token}`);
@@ -29,11 +30,9 @@ export const matchupsAPI = createApi({
   endpoints: (build) => ({
     getMatchups: build.query<MatchupT[], MatchupQueryT>({
       query: (options) => ({
-        url: `${baseUrl}/api/v1/matchups`,
+        url: `/api/v1/matchups`,
         params: {
           weightclass: options?.weightclass,
-          oneFighterId: options?.oneFighterId,
-          otherFighterId: options?.otherFighterId,
           getTopVoted: options?.getTopVoted,
         },
       }),
@@ -51,7 +50,7 @@ export const matchupsAPI = createApi({
     addMatchup: build.mutation<MatchupT, MatchupCreatingT>({
       query: (matchup) => {
         return {
-          url: `${baseUrl}/api/v1/matchups`,
+          url: `/api/v1/matchups`,
           method: "POST",
           body: matchup,
         };
@@ -89,7 +88,7 @@ export const matchupsAPI = createApi({
     }),
     patchMatchup: build.mutation<MatchupT, VoteForMatchupT>({
       query: (options) => ({
-        url: `${baseUrl}/api/v1/matchups/${options.matchupId}`,
+        url: `/api/v1/matchups/${options.matchupId}`,
         method: "PATCH",
         body: {
           ...options,

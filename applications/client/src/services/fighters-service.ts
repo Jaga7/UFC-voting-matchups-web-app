@@ -10,6 +10,7 @@ import baseUrl from "../shared/baseUrl";
 export const fightersAPI = createApi({
   reducerPath: "fighterPath",
   baseQuery: fetchBaseQuery({
+    baseUrl,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).authReducer.token;
       headers.set("Authorization", `Bearer ${token}`);
@@ -23,7 +24,7 @@ export const fightersAPI = createApi({
       (EntityPage & FighterQueryT) | void
     >({
       query: (options) => ({
-        url: `${baseUrl}/api/v1/fighters`,
+        url: `/api/v1/fighters`,
         params: {
           _limit: options?.amount,
           weightclass: options?.weightclass,
@@ -39,7 +40,7 @@ export const fightersAPI = createApi({
     }),
     getFightersByIds: build.query<{ response: FighterT[] }, string[]>({
       query: (ids) => ({
-        url: `${baseUrl}/api/v1/fighters?${ids.reduce(
+        url: `/api/v1/fighters?${ids.reduce(
           (acc, curr) => (acc += `id=${curr}&`),
           ""
         )}`,

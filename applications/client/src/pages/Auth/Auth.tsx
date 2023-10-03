@@ -9,12 +9,10 @@ import { loginUser, registerUser } from "../../features/auth/authAsyncActions";
 import {
   Button,
   ButtonGroup,
-  TextField,
   Grid,
   Paper,
   Container,
   Typography,
-  Box,
 } from "@mui/material";
 import Header from "../../components/Header/Header";
 import * as yup from "yup";
@@ -41,8 +39,6 @@ function Auth() {
       .min(4, "Password should have at least 4 letters"),
   });
 
-  // const [password, setPassword] = useState("");
-  // const [username, setUsername] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isMember, setIsMember] = useState(true);
 
@@ -69,28 +65,6 @@ function Auth() {
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-
-  // // USERNAME INPUT
-
-  // const onUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.value.length < 3) {
-  //     setUsernameError("Username must be at least 3 characters long");
-  //   } else {
-  //     setUsernameError("");
-  //   }
-  //   setUsername(e.target.value);
-  // };
-
-  // // PASSWORD INPUT
-
-  // const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.value.length < 3) {
-  //     setPasswordError("Password must be at least 4 characters long");
-  //   } else {
-  //     setPasswordError("");
-  //   }
-  //   setPassword(e.target.value);
-  // };
 
   return (
     <Container
@@ -128,9 +102,7 @@ function Auth() {
                 handleSubmit,
                 isValid,
                 dirty,
-                resetForm,
                 isSubmitting,
-                setSubmitting,
               } = props;
               return (
                 <form onSubmit={handleSubmit}>
@@ -145,20 +117,6 @@ function Auth() {
                       touched={touched}
                       error={errors}
                     ></FormInput>
-                    {/* <TextField
-                      error={Boolean(usernameError) && !focused}
-                      fullWidth
-                      required
-                      value={username}
-                      onChange={onUsernameChange}
-                      variant='filled'
-                      type='text'
-                      label='username'
-                      helperText={
-                        Boolean(usernameError) && !focused ? usernameError : ""
-                      }
-                      name='username'
-                    /> */}
                   </Grid>
                   <FormInput
                     label={"Password"}
@@ -170,18 +128,6 @@ function Auth() {
                     touched={touched}
                     error={errors}
                   ></FormInput>
-                  {/* <TextField
-                    error={Boolean(passwordError)}
-                    required
-                    fullWidth
-                    value={password}
-                    onChange={onPasswordChange}
-                    variant='filled'
-                    label='password'
-                    helperText={Boolean(passwordError) && passwordError}
-                    name='password'
-                    type={showPassword ? "text" : "password"}
-                  /> */}
                   <Grid item mt={1}>
                     <ButtonGroup orientation='vertical' fullWidth>
                       <Button onClick={toggleShowPassword} variant='outlined'>

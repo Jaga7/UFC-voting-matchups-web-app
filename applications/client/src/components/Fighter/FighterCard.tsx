@@ -112,10 +112,6 @@ const FighterCard = ({
                     disabled={areVoteButtonsDisabled}
                     onClick={(e) => {
                       setAreVoteButtonsDisabled(true);
-                      if (areVoteButtonsDisabled) {
-                        e.stopPropagation();
-                        return;
-                      }
                     }}
                   >
                     {opponent.fullname}

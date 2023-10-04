@@ -19,6 +19,6 @@ export interface FormInputProps {
   onBlur: (e: any) => void;
   isTextarea?: boolean;
   select?: boolean;
-  selectOptions?: { id: number; name: string }[]; // here the type is for courses, maybe later I should change the attribute's name to 'coursesSelectOptions'
+  selectOptions?: { id: number; name: string }[];
   children?: ReactNode | ReactNode[];
 }

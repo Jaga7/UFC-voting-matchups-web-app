@@ -103,24 +103,6 @@ export default function SplitButton({
           >
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
-                {/* <Grid
-                  container
-                  rowSpacing={1}
-                  columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                >
-                  <Grid item xs={6}>
-                    <Item>1</Item>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Item>2</Item>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Item>3</Item>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Item>4</Item>
-                  </Grid>
-                </Grid> */}
                 <MenuList id='split-button-menu' autoFocusItem>
                   <Grid
                     container
@@ -128,7 +110,6 @@ export default function SplitButton({
                     columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                   >
                     <Grid item xs={6}>
-                      {/* <Item>1</Item> */}
                       {weightclassNamesForText
                         .slice(0, 8)
                         .map((option, index) => (
@@ -144,7 +125,6 @@ export default function SplitButton({
                         ))}
                     </Grid>
                     <Grid item xs={6}>
-                      {/* <Item>1</Item> */}
                       {weightclassNamesForText.slice(8).map((option, index) => (
                         <MenuItem
                           key={option}
